@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3BD5267B-0052-4B62-9173-CD3FDB8AC5C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OneStepCloudAPI</RootNamespace>
+    <AssemblyName>OneStepCloudAPI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\ExceptionHelper.cs" />
+    <Compile Include="Exceptions\NotAuthorizedException.cs" />
+    <Compile Include="Exceptions\OSCException.cs" />
+    <Compile Include="Exceptions\PublicNetworkTaskException.cs" />
+    <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Exceptions\ServerErrorException.cs" />
+    <Compile Include="Exceptions\VirtualMachineTaskException.cs" />
+    <Compile Include="Interfaces\IOSCRequestManager.cs" />
+    <Compile Include="Managers\AccountManager.cs" />
+    <Compile Include="Managers\BillingManager.cs" />
+    <Compile Include="Managers\NetworkManager.cs" />
+    <Compile Include="Managers\UsersManager.cs" />
+    <Compile Include="Managers\VirtualMachinesManager.cs" />
+    <Compile Include="Managers\VpnManager.cs" />
+    <Compile Include="OneStepClient.cs" />
+    <Compile Include="OneStepObjects\BillingInformation.cs" />
+    <Compile Include="OneStepObjects\BillingOverview.cs" />
+    <Compile Include="OneStepObjects\BillingTimeline.cs" />
+    <Compile Include="OneStepObjects\CreditCard.cs" />
+    <Compile Include="OneStepObjects\CreditCardDetail.cs" />
+    <Compile Include="OneStepObjects\GroupLimits.cs" />
+    <Compile Include="OneStepObjects\InfrastructureSummary.cs" />
+    <Compile Include="OneStepObjects\Invitation.cs" />
+    <Compile Include="OneStepObjects\Invoice.cs" />
+    <Compile Include="OneStepObjects\NetworkNAT.cs" />
+    <Compile Include="OneStepObjects\OperatingSystem.cs" />
+    <Compile Include="OneStepObjects\OSCID.cs" />
+    <Compile Include="OneStepObjects\OSCLoginObject.cs" />
+    <Compile Include="OneStepObjects\OSCLoginObjectPrototype.cs" />
+    <Compile Include="OneStepObjects\Payment.cs" />
+    <Compile Include="OneStepObjects\PrivateNetwork.cs" />
+    <Compile Include="OneStepObjects\Product.cs" />
+    <Compile Include="OneStepObjects\PromoCode.cs" />
+    <Compile Include="OneStepObjects\PublicNetwork.cs" />
+    <Compile Include="OneStepObjects\ResourceLimit.cs" />
+    <Compile Include="OneStepObjects\SessionSummary.cs" />
+    <Compile Include="OneStepObjects\SshKey.cs" />
+    <Compile Include="OneStepObjects\User.cs" />
+    <Compile Include="OneStepObjects\VirtualMachine.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineConfigurationPrototype.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineCost.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineDisk.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineNAT.cs" />
+    <Compile Include="OneStepObjects\VirtualMachinePrototype.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineSnapshot.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineSummary.cs" />
+    <Compile Include="OneStepObjects\VirtualMachineTask.cs" />
+    <Compile Include="OSCRequestManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnderscorePropertyNamesContractResolver.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
