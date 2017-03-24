@@ -72,6 +72,7 @@
     <Compile Include="OneStepObjects\InfrastructureSummary.cs" />
     <Compile Include="OneStepObjects\Invitation.cs" />
     <Compile Include="OneStepObjects\Invoice.cs" />
+    <Compile Include="OneStepObjects\NAT.cs" />
     <Compile Include="OneStepObjects\NetworkNAT.cs" />
     <Compile Include="OneStepObjects\OperatingSystem.cs" />
     <Compile Include="OneStepObjects\OSCID.cs" />

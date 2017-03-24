@@ -161,12 +161,7 @@ namespace OneStepCloudAPI.Managers
             throw new TimeoutException();
         }
 
-        public Task DeleteNat(VirtualMachineNAT nat)
-        {
-            return DeleteNat(nat.Id);
-        }
-
-        public Task DeleteNat(NetworkNAT nat)
+        public Task DeleteNat(NAT nat)
         {
             return DeleteNat(nat.Id);
         }

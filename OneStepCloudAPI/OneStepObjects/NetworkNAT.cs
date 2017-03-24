@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
-    public class NetworkNAT
+    public class NetworkNAT : NAT
     {
-        public int Id { get; set; }
-        public NetworkResourceStatus Status { get; set; }
-        public string SourcePortRange { get; set; }
-        public string DestinationPortRange { get; set; }
-        public NetworkProtocol Protocol { get; set; }
         public int VirtualMachineId { get; set; }
         public string VirtualMachineNameTag { get; set; }
     }

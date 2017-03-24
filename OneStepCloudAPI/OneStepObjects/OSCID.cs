@@ -11,6 +11,13 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public int Id { get; set; }
 
+        public OSCID() { }
+
+        public OSCID(int id)
+        {
+            Id = id;
+        }
+
         public static implicit operator int(OSCID id)
         {
             return id.Id;
