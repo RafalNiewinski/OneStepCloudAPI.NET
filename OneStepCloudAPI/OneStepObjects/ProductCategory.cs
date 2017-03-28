@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
-    public class SshKey
+    public class ProductCategory
     {
         public int Id { get; set; }
+        public List<Product> Products { get; set; }
         public string Name { get; set; }
-        public string Fingerprint { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string IconTag { get; set; }
 
-        public static implicit operator int(SshKey key) { return key.Id; }
+        public static implicit operator int(ProductCategory cat) { return cat.Id; }
     }
 }

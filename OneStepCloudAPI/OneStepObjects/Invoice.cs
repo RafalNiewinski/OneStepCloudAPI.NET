@@ -24,10 +24,12 @@ namespace OneStepCloudAPI.OneStepObjects
         public int Id { get; set; }
         public string Total { get; set; }
         public InvoiceStatus Status { get; set; }
-        public string PeriodStart { get; set; }
-        public string PeriodEnd { get; set; }
-        public string IssuedAt { get; set; }
-        public string PaidAt { get; set; }
-        public string DueAt { get; set; }
+        public DateTime PeriodStart { get; set; }
+        public DateTime PeriodEnd { get; set; }
+        public DateTime IssuedAt { get; set; }
+        public DateTime PaidAt { get; set; }
+        public DateTime DueAt { get; set; }
+
+        public static implicit operator int(Invoice inv) { return inv.Id; }
     }
 }

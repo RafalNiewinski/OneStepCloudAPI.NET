@@ -11,16 +11,11 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public string Code { get; set; }
         public string Amount { get; set; }
-        public string UsedAt { get; set; }
+        public DateTime UsedAt { get; set; }
 
         public decimal GetNumericAmount()
         {
             return decimal.Parse(Amount, System.Globalization.NumberStyles.Currency, CultureInfo.InvariantCulture);
-        }
-
-        public DateTime GetUsedDate()
-        {
-            return DateTime.Parse(UsedAt);
         }
     }
 }

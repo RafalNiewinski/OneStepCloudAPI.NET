@@ -9,6 +9,8 @@ namespace OneStepCloudAPI.OneStepObjects
     public class VirtualMachineSnapshot
     {
         public int Id { get; set; }
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public static implicit operator int(VirtualMachineSnapshot snap) { return snap.Id; }
     }
 }

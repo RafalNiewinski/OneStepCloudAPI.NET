@@ -55,8 +55,10 @@ namespace OneStepCloudAPI.OneStepObjects
         public int MemoryMb { get; set; }
         public List<VirtualMachineDisk> VirtualMachineDisks { get; set; }
         public VirtualMachineStatus Status { get; set; }
-        public OperatingSystem OperatingSystem { get; set; }
+        public OperatingSystemSummary OperatingSystem { get; set; }
         public List<VirtualMachinePermission> VirtualMachinePermissions { get; set; }
+
+        public static implicit operator int(VirtualMachineSummary vm) { return vm.Id; }
 
 
         public bool ChackPermission(VirtualMachinePermission perm)

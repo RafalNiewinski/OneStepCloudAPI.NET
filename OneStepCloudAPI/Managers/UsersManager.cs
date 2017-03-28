@@ -51,10 +51,10 @@ namespace OneStepCloudAPI.Managers
             return users.Where(x => x.Id == user.Id).First();
         }
 
-        public async Task<User> AddUserPermission(User user, UserPermission perm)
+        public async Task<User> AddUserPermission(int user, UserPermission perm)
         {
             var users = await GetAll();
-            User live = users.Where(x => x.Id == user.Id).First();
+            User live = users.Where(x => x.Id == user).First();
 
             if (!live.Permissions.Contains(perm))
             {
@@ -65,10 +65,10 @@ namespace OneStepCloudAPI.Managers
             return live;
         }
 
-        public async Task<User> RemoveUserPermission(User user, UserPermission perm)
+        public async Task<User> RemoveUserPermission(int user, UserPermission perm)
         {
             var users = await GetAll();
-            User live = users.Where(x => x.Id == user.Id).First();
+            User live = users.Where(x => x.Id == user).First();
 
             if (live.Permissions.Contains(perm))
             {
@@ -120,9 +120,9 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest(String.Format("invitation/{0}", invite.InvitationToken), RestSharp.Method.DELETE, new { id = invite.InvitationToken });
         }
 
-        public async Task DeleteUser(User user)
+        public async Task DeleteUser(int user)
         {
-            await rm.SendRequest(String.Format("users/{0}", user.Id), RestSharp.Method.DELETE);
+            await rm.SendRequest(String.Format("users/{0}", user), RestSharp.Method.DELETE);
         }
     }
 }

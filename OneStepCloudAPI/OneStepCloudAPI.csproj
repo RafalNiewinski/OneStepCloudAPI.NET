@@ -81,8 +81,10 @@
     <Compile Include="OneStepObjects\Payment.cs" />
     <Compile Include="OneStepObjects\PrivateNetwork.cs" />
     <Compile Include="OneStepObjects\Product.cs" />
+    <Compile Include="OneStepObjects\ProductCategory.cs" />
     <Compile Include="OneStepObjects\PromoCode.cs" />
     <Compile Include="OneStepObjects\PublicNetwork.cs" />
+    <Compile Include="OneStepObjects\Resource.cs" />
     <Compile Include="OneStepObjects\ResourceLimit.cs" />
     <Compile Include="OneStepObjects\SessionSummary.cs" />
     <Compile Include="OneStepObjects\SshKey.cs" />

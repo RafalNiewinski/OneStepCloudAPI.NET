@@ -97,6 +97,11 @@ namespace OneStepCloudAPIClient
 
                 Console.WriteLine("Maintenance: " + uscl.MainenanceMessage().Result);
 
+                Console.WriteLine("Virtual Machines:");
+                var vms = uscl.VirtualMachines.GetAllDetailed().Result;
+                foreach (var vm in vms)
+                    Console.WriteLine(String.Format("    - {0} - {1} - {2} - {3} - CPU: {4} - MEM: {5} - STORAGE: {6} - {7}", vm.Id, vm.NameTag, vm.CreatedAt, vm.Username, vm.Cpu, vm.MemoryMb, vm.StorageGb, vm.PrivateNetworks.First().IpAddress));
+
                 PrintNetworks(uscl);
 
                 /*var newnett = uscl.Network.Create();
@@ -141,7 +146,7 @@ namespace OneStepCloudAPIClient
                 {
                     try
                     {
-                        test99.Add(uscl.VirtualMachines.Create(new VirtualMachinePrototype { cpu = 1, memory_mb = 1024, product_id = 19, virtual_machine_disks = new List<VirtualMachineDisk> { new VirtualMachineDisk { primary = true, storage_gb = 10, storage_type = VirtualMachineDiskStorageType.optimal } } }).Result);
+                        test99.Add(uscl.VirtualMachines.Get(uscl.VirtualMachines.Create(new VirtualMachinePrototype { Cpu = 1, MemoryMb = 1024, ProductId = 19, VirtualMachineDisks = new List<VirtualMachineDisk> { new VirtualMachineDisk { Primary = true, StorageGb = 10, StorageType = VirtualMachineDiskStorageType.optimal } } }).Result).Result);
                     }
                     catch (AggregateException e)
                     {
@@ -153,7 +158,7 @@ namespace OneStepCloudAPIClient
                 List<Task<VirtualMachine>> tasks99 = new List<Task<VirtualMachine>>();
                 foreach(var vm in test99)
                 {
-                    tasks99.Add(uscl.VirtualMachines.Configure(vm, new VirtualMachineConfigurationPrototype { virtual_machine_name = "TEST99n" + vm.id.ToString() }));
+                    tasks99.Add(uscl.VirtualMachines.Configure(vm, new VirtualMachineConfigurationPrototype { VirtualMachineName = "TEST99n" + vm.Id.ToString() }));
                 }
                 Task.WaitAll(tasks99.ToArray());
 
@@ -226,7 +231,7 @@ namespace OneStepCloudAPIClient
                 var invoices = uscl.Billing.GetInvoices().Result;
                 Console.WriteLine("Invoices:");
                 foreach (var invoice in invoices)
-                    Console.WriteLine(String.Format("    - {0} ({1} - {2}) - {3} - PAID: {4} (due: {5})  => {6}", invoice.IssuedAt, invoice.PeriodStart, invoice.PeriodEnd, invoice.Status, invoice.PaidAt, invoice.DueAt, invoice.Total));
+                    Console.WriteLine(String.Format("    - {0} ({1} - {2}) - {3} - PAID: {4} (due: {5})  => {6}", invoice.IssuedAt.ToShortDateString(), invoice.PeriodStart.ToShortDateString(), invoice.PeriodEnd.ToShortDateString(), invoice.Status, invoice.PaidAt.ToShortDateString(), invoice.DueAt.ToShortDateString(), invoice.Total));
 
 
                 //var downloadedinvoice = uscl.Billing.DownloadInvoice(invoices.Last()).Result;
@@ -257,6 +262,31 @@ namespace OneStepCloudAPIClient
                 uscl.Account.AddSshKey("KLUCZ", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJkbvCWyQE6gMXqRCcp/MFb0Ejw8ifoBI350Tub/wHFmXhYshj9615nQty/zu8BraTkRJw3+cn7R/Z02T5gXpn+j+23xcNyOZPDbOtCId5CTdBj0vPCezZvSDYG1uyzTWhEKtBTBrW/R2Vng7de39MZde5aWC08c5kmV9B7HDumgs51O4rnlpgwOlr2Ch2urlMqz5T6hPJlLxTgTE1SicBNzOR7QwwFmxQjE2KEsvPLPdKRs7KIBI5aKgPgm4bJMaQb/T8rlm+nrgnJ4gBidp5O1PHSYQIVNZpvBFVORTWLvxFzL9jlH5PLTRLB2Lk7AfjapJs72yPj18oGOLzyZh Rafal@DESKTOP").Wait();
                 sshkeys = uscl.Account.GetSshKeys().Result;
                 uscl.Account.DeleteSshKey(sshkeys.Last()).Wait();
+
+                Console.WriteLine("PRICES:");
+                var prices = uscl.GetOSCPrices().Result;
+                foreach (var price in prices)
+                    Console.WriteLine("    - " + price.Key + " => " + price.Value);
+
+                Console.WriteLine("TEMPLATES:");
+                var templates = uscl.VirtualMachines.GetTemplates().Result;
+                foreach (var t in templates)
+                {
+                    Console.WriteLine(String.Format("    - {0} - {8} - CPU({1}-{2}) - MEM({3}-{4}) - STORAGE({5}*{6}-{7})", t.Id, t.MinimumCpu, t.MaximumCpu, t.MinimumMemoryMb, t.MaximumMemoryMb, t.MaximumAdditionalDisks, t.MinimumStorageGb, t.MaximumStorageGb, t.Name));
+                    Console.WriteLine(String.Format("        OS => {0} - {1} - {2} - DISK: {3}", t.OperatingSystem.Id, t.OperatingSystem.Name, t.OperatingSystem.SystemType, t.OperatingSystem.StorageGb));
+                }
+
+                Console.WriteLine("PRODUCTS:");
+                var products = uscl.VirtualMachines.GetProducts().Result;
+                foreach(var p in products)
+                {
+                    Console.WriteLine(String.Format("    - {0} - {1}", p.Id, p.Name));
+                    foreach(var t in p.Products)
+                    {
+                        Console.WriteLine(String.Format("        - {0} - {8} - CPU({1}-{2}) - MEM({3}-{4}) - STORAGE({5}*{6}-{7})", t.Id, t.MinimumCpu, t.MaximumCpu, t.MinimumMemoryMb, t.MaximumMemoryMb, t.MaximumAdditionalDisks, t.MinimumStorageGb, t.MaximumStorageGb, t.Name));
+                        Console.WriteLine(String.Format("            OS => {0} - {1} - {2} - DISK: {3}", t.OperatingSystem.Id, t.OperatingSystem.Name, t.OperatingSystem.SystemType, t.OperatingSystem.StorageGb));
+                    }
+                }
 
                 //PrepareLBTestClients();
             }
@@ -341,7 +371,7 @@ namespace OneStepCloudAPIClient
             {
                 Cpu = 2,
                 MemoryMb = 2048,
-                ProductId = 4,
+                Product = 4,
                 VirtualMachineDisks = new List<VirtualMachineDisk>()
                 {
                     new VirtualMachineDisk() {Primary= true, StorageGb = 10, StorageType = VirtualMachineDiskStorageType.optimal }

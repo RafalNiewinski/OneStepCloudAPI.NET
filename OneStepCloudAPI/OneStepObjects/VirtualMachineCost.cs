@@ -17,5 +17,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string NameTag { get; set; }
         public VirtualMachineStatus Status { get; set; }
         public string Cost { get; set; }
+
+        public static implicit operator int(VirtualMachineCost vm) { return vm.Id; }
     }
 }

@@ -22,6 +22,16 @@ namespace OneStepCloudAPI.Managers
             this.rm = rm;
         }
 
+        public Task<List<Product>> GetTemplates()
+        {
+            return rm.SendRequest<List<Product>>("templates");
+        }
+
+        public async Task<List<ProductCategory>> GetProducts()
+        {
+            return (await rm.SendRequest<ProductCategoriesWrapper>("products")).ProductCategories;
+        }
+
         public Task<List<VirtualMachineSummary>> GetAll()
         {
             return rm.SendRequest<List<VirtualMachineSummary>>("virtual_machines");
@@ -43,11 +53,6 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<VirtualMachine>(String.Format("virtual_machines/{0}", id));
         }
 
-        public Task<VirtualMachine> Get(VirtualMachineSummary vm)
-        {
-            return Get(vm.Id);
-        }
-
         public async Task<int> Create(VirtualMachinePrototype proto)
         {
             return await rm.SendRequest<OSCID>("virtual_machines", RestSharp.Method.POST, proto);
@@ -60,11 +65,6 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest(String.Format("virtual_machines/{0}/configure", id), RestSharp.Method.POST, new { configuration_options = proto });
 
             return await WaitForState(id, VirtualMachineStatus.idle);
-        }
-
-        public Task<VirtualMachine> Configure(VirtualMachineSummary vm, VirtualMachineConfigurationPrototype proto)
-        {
-            return Configure(vm.Id, proto);
         }
 
         public async Task<VirtualMachine> Edit(VirtualMachine vm)
@@ -103,20 +103,10 @@ namespace OneStepCloudAPI.Managers
             throw new TimeoutException();
         }
 
-        public Task Delete(VirtualMachineSummary vm)
-        {
-            return Delete(vm.Id);
-        }
-
         public async Task<VirtualMachine> PowerOn(int id)
         {
             await rm.SendRequest(String.Format("virtual_machines/{0}/power_on", id), RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
-        }
-
-        public Task<VirtualMachine> PowerOn(VirtualMachineSummary vm)
-        {
-            return PowerOn(vm.Id);
         }
 
         public async Task<VirtualMachine> Suspend(int id)
@@ -125,20 +115,10 @@ namespace OneStepCloudAPI.Managers
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
-        public Task<VirtualMachine> Suspend(VirtualMachineSummary vm)
-        {
-            return Suspend(vm.Id);
-        }
-
         public async Task<VirtualMachine> PowerOff(int id)
         {
             await rm.SendRequest(String.Format("virtual_machines/{0}/shutdown", id), RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
-        }
-
-        public Task<VirtualMachine> PowerOff(VirtualMachineSummary vm)
-        {
-            return PowerOff(vm.Id);
         }
 
         public async Task<VirtualMachine> Reboot(int id)
@@ -147,20 +127,10 @@ namespace OneStepCloudAPI.Managers
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
-        public Task<VirtualMachine> Reboot(VirtualMachineSummary vm)
-        {
-            return Reboot(vm.Id);
-        }
-
         public async Task<VirtualMachine> SnapshotCreate(int id)
         {
             await rm.SendRequest(String.Format("virtual_machines/{0}/snapshots", id), RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
-        }
-
-        public Task<VirtualMachine> SnapshotCreate(VirtualMachineSummary vm)
-        {
-            return SnapshotCreate(vm.Id);
         }
 
         public async Task<VirtualMachine> SnapshotRevert(int vmid, int snapid)
@@ -191,29 +161,23 @@ namespace OneStepCloudAPI.Managers
             return await Get(vmid);
         }
 
-        public Task<VirtualMachine> Rename(VirtualMachineSummary vm, string name)
-        {
-            return Rename(vm.Id, name);
-        }
 
         #region Permissions Management
 
-        public async Task<List<VirtualMachinePermission>> GetPermissionsForUser(VirtualMachineSummary vm, User user)
+        public async Task<List<VirtualMachinePermission>> GetPermissionsForUser(int vm, int user)
         {
-            VirtualMachine tvm = await Get(vm);
-            string res = await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", tvm.Id, user.Id));
+            string res = await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", vm, user));
             return Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.permissions").ToObject<VirtualMachinePermission[]>().ToList();
         }
 
-        public async Task<List<VirtualMachinePermission>> SetPermissionsForUser(VirtualMachineSummary vm, User user, List<VirtualMachinePermission> perms)
+        public async Task<List<VirtualMachinePermission>> SetPermissionsForUser(int vm, int user, List<VirtualMachinePermission> perms)
         {
-            VirtualMachine tvm = await Get(vm);
-            await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", tvm.Id, user.Id), RestSharp.Method.PATCH, new { permissions = perms });
+            await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", vm, user), RestSharp.Method.PATCH, new { permissions = perms });
 
-            return await GetPermissionsForUser(tvm, user);
+            return await GetPermissionsForUser(vm, user);
         }
 
-        public async Task<List<VirtualMachinePermission>> AddPermissionForUser(VirtualMachineSummary vm, User user, VirtualMachinePermission perm)
+        public async Task<List<VirtualMachinePermission>> AddPermissionForUser(int vm, int user, VirtualMachinePermission perm)
         {
             List<VirtualMachinePermission> perms = await GetPermissionsForUser(vm, user);
             if (!perms.Contains(perm))
@@ -224,7 +188,7 @@ namespace OneStepCloudAPI.Managers
             return perms;
         }
 
-        public async Task<List<VirtualMachinePermission>> RemovePermissionForUser(VirtualMachineSummary vm, User user, VirtualMachinePermission perm)
+        public async Task<List<VirtualMachinePermission>> RemovePermissionForUser(int vm, int user, VirtualMachinePermission perm)
         {
             List<VirtualMachinePermission> perms = await GetPermissionsForUser(vm, user);
             if (perms.Contains(perm))
@@ -260,6 +224,8 @@ namespace OneStepCloudAPI.Managers
 
             throw new TimeoutException();
         }
+
+        private class ProductCategoriesWrapper { public List<ProductCategory> ProductCategories; }
         #endregion
     }
 }

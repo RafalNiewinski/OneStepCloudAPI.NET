@@ -13,5 +13,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string SourcePortRange { get; set; }
         public string DestinationPortRange { get; set; }
         public NetworkProtocol Protocol { get; set; }
+
+        public static implicit operator int(NAT nat) { return nat.Id; }
     }
 }

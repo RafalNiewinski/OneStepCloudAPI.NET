@@ -15,12 +15,12 @@ namespace OneStepCloudAPI.OneStepObjects
         public int CpuUsage { get; set; }
         public int MemoryMbUsage { get; set; }
         public string Username { get; set; }
-        public Product Product { get; set; }
+        public ProductSummary Product { get; set; }
         public List<PrivateNetwork> PrivateNetworks { get; set; }
         public List<VirtualMachineSnapshot> VirtualMachineSnapshots { get; set; }
         public List<VirtualMachineTask> VirtualMachineTasks { get; set; }
         public string CreatedBy { get; set; }
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
 
         public VirtualMachinePrototype GetPrototype()
@@ -29,7 +29,7 @@ namespace OneStepCloudAPI.OneStepObjects
             {
                 Cpu = Cpu,
                 MemoryMb = MemoryMb,
-                ProductId = Product.Id,
+                Product = Product.Id,
                 VirtualMachineDisks = VirtualMachineDisks
             };
         }

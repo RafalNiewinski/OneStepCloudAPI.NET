@@ -40,11 +40,6 @@ namespace OneStepCloudAPI.Managers
             return await rm.SendRequest<PublicNetwork>(String.Format("public_networks/{0}", netid));
         }
 
-        public Task<PublicNetwork> GetNetwork(PublicNetworkSummary net)
-        {
-            return GetNetwork(net.Id);
-        }
-
         public async Task<PublicNetwork> Create()
         {
             int id = await rm.SendRequest<OSCID>("public_networks", RestSharp.Method.POST);
@@ -69,11 +64,6 @@ namespace OneStepCloudAPI.Managers
 
             throw new TimeoutException();
         }
-
-        public Task Delete(PublicNetworkSummary net)
-        {
-            return Delete(net.Id);
-        }
         #endregion
 
         #region NATs
@@ -97,7 +87,6 @@ namespace OneStepCloudAPI.Managers
             return (await GetNats()).Values.SelectMany(x => x).ToList();
         }
 
-        #region NAT Create
         public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
         {
             int id = await rm.SendRequest<OSCID>("nats/advanced", RestSharp.Method.POST,
@@ -115,34 +104,6 @@ namespace OneStepCloudAPI.Managers
             return await WaitForNatState(id, publicnetworkid, NetworkResourceStatus.idle);
         }
 
-        public Task<NetworkNAT> CreateNat(VirtualMachineSummary vm, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetworkid, privatenetworkid, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(int vmid, PublicNetworkSummary publicnetwork, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vmid, publicnetwork.Id, privatenetworkid, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, PrivateNetwork privatenetwork, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vmid, publicnetworkid, privatenetwork.Id, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(VirtualMachineSummary vm, PublicNetworkSummary publicnetwork, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetwork.Id, privatenetworkid, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(VirtualMachineSummary vm, int publicnetworkid, PrivateNetwork privatenetwork, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetworkid, privatenetwork.Id, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(int vmid, PublicNetworkSummary publicnetwork, PrivateNetwork privatenetwork, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vmid, publicnetwork.Id, privatenetwork.Id, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(VirtualMachineSummary vm, PublicNetworkSummary publicnetwork, PrivateNetwork privatenetwork, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetwork.Id, privatenetwork.Id, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(VirtualMachine vm, int publicnetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetworkid, vm.PrivateNetworks.First().Id, sourceportrange, destportrange, proto); }
-
-        public Task<NetworkNAT> CreateNat(VirtualMachine vm, PublicNetworkSummary publicnetwork, string sourceportrange, string destportrange, NetworkProtocol proto)
-        { return CreateNat(vm.Id, publicnetwork, vm.PrivateNetworks.First().Id, sourceportrange, destportrange, proto); }
-        #endregion
-
         public async Task DeleteNat(int natid)
         {
             await rm.SendRequest(String.Format("nats/{0}", natid), RestSharp.Method.DELETE, new { id = natid });
@@ -159,11 +120,6 @@ namespace OneStepCloudAPI.Managers
             }
 
             throw new TimeoutException();
-        }
-
-        public Task DeleteNat(NAT nat)
-        {
-            return DeleteNat(nat.Id);
         }
         #endregion
 

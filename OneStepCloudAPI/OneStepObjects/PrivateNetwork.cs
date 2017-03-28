@@ -10,5 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public int Id { get; set; }
         public string IpAddress { get; set; }
+
+        public static implicit operator int(PrivateNetwork net) { return net.Id; }
     }
 }

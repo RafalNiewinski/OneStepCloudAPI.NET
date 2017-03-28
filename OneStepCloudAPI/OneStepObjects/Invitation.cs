@@ -8,9 +8,12 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public class Invitation
     {
+        public int Id { get; set; }
         public string InvitationToken { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string InvitationExpiresAt { get; set; }
+
+        public static implicit operator int(Invitation inv) { return inv.Id; }
     }
 }

@@ -74,5 +74,10 @@ namespace OneStepCloudAPI
                 Authorized = true;
         }
 
+        public Task<Dictionary<string, string>> GetOSCPrices()
+        {
+            return requestManager.SendRequest<Dictionary<string, string>>("prices");
+        }
+
     }
 }

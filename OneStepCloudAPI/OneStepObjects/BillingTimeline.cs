@@ -9,15 +9,10 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public class BillingTimelineEntry
     {
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string Cost { get; set; }
         public string ComputingCost { get; set; }
         public string StorageCost { get; set; }
-
-        public DateTime GetDateTime()
-        {
-            return DateTime.Parse(Date);
-        }
 
         public decimal GetNumericCost()
         {
@@ -61,7 +56,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
         public KeyValuePair<DateTime, DateTime> TimelinePeriod()
         {
-            var list = (from x in Entries select x.GetDateTime()).OrderBy(x => x).ToList();
+            var list = (from x in Entries select x.Date).OrderBy(x => x).ToList();
             return new KeyValuePair<DateTime, DateTime>(list.First(), list.Last());
         }
     }

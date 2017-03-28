@@ -11,6 +11,8 @@ namespace OneStepCloudAPI.OneStepObjects
         public int Id { get; set; }
         public string DisplayName { get; set; }
         public string DisplayType { get; set; }
+
+        public static implicit operator int(PaymentMethod pm) { return pm.Id; }
     }
 
     public class Payment

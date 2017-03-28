@@ -45,10 +45,5 @@ namespace OneStepCloudAPI.Managers
         {
             await rm.SendRequest(String.Format("user/keys/{0}", keyid), RestSharp.Method.DELETE, new { id = keyid });
         }
-
-        public Task DeleteSshKey(SshKey key)
-        {
-            return DeleteSshKey(key.Id);
-        }
     }
 }

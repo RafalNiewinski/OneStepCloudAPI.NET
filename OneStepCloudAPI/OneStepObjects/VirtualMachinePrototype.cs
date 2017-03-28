@@ -10,7 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public int Cpu { get; set; }
         public int MemoryMb { get; set; }
-        public int ProductId { get; set; }
+        public int Product { get; set; }
         public List<VirtualMachineDisk> VirtualMachineDisks { get; set; }
     }
 }

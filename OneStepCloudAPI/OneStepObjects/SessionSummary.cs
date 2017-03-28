@@ -26,15 +26,27 @@ namespace OneStepCloudAPI.OneStepObjects
         billing_manage
     }
 
+    public enum GroupStatus
+    {
+        account_created = 0,
+        account_verified = 1,
+        payment_created = 2,
+        payment_verified = 3,
+        payment_overdue = 4,
+        deleting_process = 5
+    }
+
     public class SessionSummary
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public List<UserPermission> Permissions { get; set; }
         public bool NetworkBusy { get; set; }
-        public int GroupStatus { get; set; }
+        public GroupStatus GroupStatus { get; set; }
         public GroupLimits GroupLimits { get; set; }
         public InfrastructureSummary InfrastructureSummary { get; set; }
+
+        public static implicit operator int(SessionSummary ss) { return ss.Id; }
 
         public bool ChackPermission(UserPermission perm)
         {

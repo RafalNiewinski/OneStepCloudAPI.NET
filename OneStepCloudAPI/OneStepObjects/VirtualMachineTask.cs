@@ -20,6 +20,8 @@ namespace OneStepCloudAPI.OneStepObjects
         public int Id { get; set; }
         public VirtualMachineTaskStatus Status { get; set; }
         public string Message { get; set; }
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public static implicit operator int(VirtualMachineTask task) { return task.Id; }
     }
 }

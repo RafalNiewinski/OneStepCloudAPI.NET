@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
-    public class Product
+    public class ProductSummary
     {
         public int Id { get; set; }
         public int MinimumCpu { get; set; }
@@ -19,5 +19,15 @@ namespace OneStepCloudAPI.OneStepObjects
         public string CpuLabels { get; set; }
         public string MemoryLabels { get; set; }
         public string StorageLabels { get; set; }
+
+        public static implicit operator int(ProductSummary prod) { return prod.Id; }
+    }
+
+    public class Product : ProductSummary
+    {
+        public OperatingSystem OperatingSystem { get; set; }
+        public List<Resource> Resources { get; set; }
+        public string Name { get; set; }
+        public string Icon_tag { get; set; }
     }
 }

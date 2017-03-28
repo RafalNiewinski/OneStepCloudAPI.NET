@@ -33,5 +33,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
             return true;
         }
+
+        public static implicit operator int(User user) { return user.Id; }
     }
 }

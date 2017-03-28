@@ -33,5 +33,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public NetworkResourceStatus Status { get; set; }
         public string IpAddress { get; set; }
         public int NatsCount { get; set; }
+
+        public static implicit operator int(PublicNetworkSummary net) { return net.Id; }
     }
 }

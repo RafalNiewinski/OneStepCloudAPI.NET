@@ -6,9 +6,24 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
-    public class OperatingSystem
+    public enum SystemType
+    {
+        Windows,
+        Linux
+    }
+
+    public class OperatingSystemSummary
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public static implicit operator int(OperatingSystemSummary os) { return os.Id; }
+    }
+
+    public class OperatingSystem : OperatingSystemSummary
+    {
+        public int StorageGb { get; set; }
+        public SystemType SystemType { get; set; }
+        public string IconTag { get; set; }
     }
 }
