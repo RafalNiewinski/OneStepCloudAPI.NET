@@ -146,7 +146,8 @@ namespace OneStepCloudAPIClient
                 {
                     try
                     {
-                        test99.Add(uscl.VirtualMachines.Get(uscl.VirtualMachines.Create(new VirtualMachinePrototype { Cpu = 1, MemoryMb = 1024, ProductId = 19, VirtualMachineDisks = new List<VirtualMachineDisk> { new VirtualMachineDisk { Primary = true, StorageGb = 10, StorageType = VirtualMachineDiskStorageType.optimal } } }).Result).Result);
+                        var template = uscl.VirtualMachines.GetTemplates().Result.Where(x => x.Name == "windows_server_2012_r2").First();
+                        test99.Add(uscl.VirtualMachines.Get(uscl.VirtualMachines.Create(template.GetVirtualMachinePrototype(5, 1024, VirtualMachineDiskStorageType.optimal, new List<VirtualMachineDisk> { new VirtualMachineDisk { Primary = true, StorageGb = 10, StorageType = VirtualMachineDiskStorageType.performance } })).Result).Result);
                     }
                     catch (AggregateException e)
                     {
@@ -371,7 +372,7 @@ namespace OneStepCloudAPIClient
             {
                 Cpu = 2,
                 MemoryMb = 2048,
-                Product = 4,
+                ProductId = 4,
                 VirtualMachineDisks = new List<VirtualMachineDisk>()
                 {
                     new VirtualMachineDisk() {Primary= true, StorageGb = 10, StorageType = VirtualMachineDiskStorageType.optimal }

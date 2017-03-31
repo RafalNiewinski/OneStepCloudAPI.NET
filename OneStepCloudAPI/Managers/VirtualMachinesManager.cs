@@ -225,7 +225,7 @@ namespace OneStepCloudAPI.Managers
             throw new TimeoutException();
         }
 
-        private class ProductCategoriesWrapper { public List<ProductCategory> ProductCategories; }
+        private class ProductCategoriesWrapper { public List<ProductCategory> ProductCategories { get; set; } }
         #endregion
     }
 }

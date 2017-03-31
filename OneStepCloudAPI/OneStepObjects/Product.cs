@@ -29,5 +29,51 @@ namespace OneStepCloudAPI.OneStepObjects
         public List<Resource> Resources { get; set; }
         public string Name { get; set; }
         public string Icon_tag { get; set; }
+
+
+        #region VM PROTOTYPES
+
+        public VirtualMachinePrototype GetVirtualMachinePrototype()
+        {
+            return new VirtualMachinePrototype
+            {
+                Cpu = MinimumCpu,
+                MemoryMb = MinimumMemoryMb,
+                ProductId = Id,
+                VirtualMachineDisks = new List<VirtualMachineDisk> { new VirtualMachineDisk { Primary = true, StorageGb = OperatingSystem.StorageGb, StorageType = VirtualMachineDiskStorageType.optimal } }
+            };
+        }
+
+        public VirtualMachinePrototype GetVirtualMachinePrototype(int cpu, int mem, VirtualMachineDiskStorageType disksType = VirtualMachineDiskStorageType.optimal, List<VirtualMachineDisk> additionalDisks = null)
+        {
+            var disks = new List<VirtualMachineDisk> { new VirtualMachineDisk { Primary = true, StorageGb = OperatingSystem.StorageGb, StorageType = disksType} };
+
+            if (additionalDisks != null)
+            {
+                if (additionalDisks.Count > MaximumAdditionalDisks)
+                    additionalDisks = additionalDisks.Take(MaximumAdditionalDisks).ToList();
+
+                additionalDisks.ForEach(x =>
+                {
+                    x.Id = 0;
+                    x.Primary = false;
+                    x.StorageGb = (x.StorageGb < MinimumStorageGb) ? MinimumStorageGb : (x.StorageGb > MaximumStorageGb) ? MaximumStorageGb : x.StorageGb;
+                    x.StorageType = disksType;
+                });
+
+                disks.AddRange(additionalDisks);
+            }
+
+
+            return new VirtualMachinePrototype
+            {
+                Cpu = (cpu < MinimumCpu) ? MinimumCpu : (cpu > MaximumCpu) ? MaximumCpu : cpu,
+                MemoryMb = (mem < MinimumMemoryMb) ? MinimumMemoryMb : (mem > MaximumMemoryMb) ? MaximumMemoryMb : mem,
+                ProductId = Id,
+                VirtualMachineDisks = disks
+            };
+        }
+
+        #endregion
     }
 }

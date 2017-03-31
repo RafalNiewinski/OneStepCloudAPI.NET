@@ -29,7 +29,7 @@ namespace OneStepCloudAPI.OneStepObjects
             {
                 Cpu = Cpu,
                 MemoryMb = MemoryMb,
-                Product = Product.Id,
+                ProductId = Product.Id,
                 VirtualMachineDisks = VirtualMachineDisks
             };
         }
