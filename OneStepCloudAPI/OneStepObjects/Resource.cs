@@ -14,11 +14,8 @@ namespace OneStepCloudAPI.OneStepObjects
 
     public class Resource
     {
-        public int Id { get; set; }
         public string ResourceType { get; set; }
         public Interval Interval { get; set; }
         public double Price { get; set; }
-
-        public static implicit operator int(Resource res) { return res.Id; }
     }
 }

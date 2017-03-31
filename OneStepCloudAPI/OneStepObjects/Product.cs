@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
+    public class ProductPrices
+    {
+        public decimal Cpu { get; set; }
+        public decimal MemoryMb { get; set; }
+        public decimal HddOptimal { get; set; }
+        public decimal HddPerformance { get; set; }
+    }
+
     public class ProductSummary
     {
         public int Id { get; set; }
@@ -29,6 +37,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public List<Resource> Resources { get; set; }
         public string Name { get; set; }
         public string Icon_tag { get; set; }
+        public ProductPrices Prices { get; set; }
 
 
         #region VM PROTOTYPES

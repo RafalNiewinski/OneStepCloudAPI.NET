@@ -11,7 +11,6 @@ namespace OneStepCloudAPI.OneStepObjects
         public int Id { get; set; }
         public List<Product> Products { get; set; }
         public string Name { get; set; }
-        public string IconTag { get; set; }
 
         public static implicit operator int(ProductCategory cat) { return cat.Id; }
     }
