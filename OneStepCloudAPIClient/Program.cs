@@ -182,7 +182,7 @@ namespace OneStepCloudAPIClient
                 var costtimeline = uscl.Billing.GetCostTimeline().Result;
                 Console.WriteLine("    Current cost: " + billingsummary.CurrentCost);
                 Console.WriteLine("    Current balance: " + billingsummary.CurrentBalance);
-                Console.WriteLine("    Current period: " + billingsummary.CurrentPeriod);
+                Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToShortDateString() + " - " + billingsummary.PeriodEnd.ToShortDateString());
                 Console.WriteLine("Cost Timeline:");
                 Console.WriteLine("    Entries:");
                 foreach (var entry in costtimeline.GetEntries())
@@ -226,7 +226,7 @@ namespace OneStepCloudAPIClient
                 var payments = uscl.Billing.GetPaymentHistory().Result;
                 Console.WriteLine("Payments:");
                 foreach (var payment in payments)
-                    Console.WriteLine("    - " + payment.CreatedAt + " - " + (payment.PaymentMethod != null ? payment.PaymentMethod.DisplayName : "") + " - " + payment.Amount + " - " + payment.Status);
+                    Console.WriteLine("    - " + payment.CreatedAt.ToShortDateString() + " - " + (payment.PaymentMethod != null ? payment.PaymentMethod.DisplayName : "") + " - " + payment.Amount + " - " + payment.Status);
 
 
                 var invoices = uscl.Billing.GetInvoices().Result;

@@ -19,7 +19,7 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public PaymentMethod PaymentMethod { get; set; }
         public string Status { get; set; }
-        public string CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string Amount { get; set; }
     }
 }

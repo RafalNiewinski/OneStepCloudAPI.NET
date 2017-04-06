@@ -12,7 +12,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string InvitationToken { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string InvitationExpiresAt { get; set; }
+        public DateTime InvitationExpiresAt { get; set; }
 
         public static implicit operator int(Invitation inv) { return inv.Id; }
     }
