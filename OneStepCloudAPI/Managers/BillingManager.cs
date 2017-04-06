@@ -71,6 +71,11 @@ namespace OneStepCloudAPI.Managers
             return await rm.SendRequest<byte[]>(String.Format("invoices/{0}.pdf", id));
         }
 
+        public Task PayInvoice(int id)
+        {
+            return rm.SendRequest(String.Format("invoices/{0}", id), RestSharp.Method.PATCH, new { id = id });
+        }
+
         public async Task<List<VirtualMachineCost>> GetVirtualMachinesCosts()
         {
             return await rm.SendRequest<List<VirtualMachineCost>>("billing/detailed_summary");

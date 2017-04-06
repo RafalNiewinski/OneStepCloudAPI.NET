@@ -234,6 +234,10 @@ namespace OneStepCloudAPIClient
                 foreach (var invoice in invoices)
                     Console.WriteLine(String.Format("    - {0} ({1} - {2}) - {3} - PAID: {4} (due: {5})  => {6}", invoice.IssuedAt.ToShortDateString(), invoice.PeriodStart.ToShortDateString(), invoice.PeriodEnd.ToShortDateString(), invoice.Status, invoice.PaidAt.ToShortDateString(), invoice.DueAt.ToShortDateString(), invoice.Total));
 
+                Console.WriteLine("Trying to pay all unpaid invoices");
+                foreach (var invoice in invoices.Where(i => i.Status == InvoiceStatus.unpaid))
+                    uscl.Billing.PayInvoice(invoice).Wait();
+
 
                 //var downloadedinvoice = uscl.Billing.DownloadInvoice(invoices.Last()).Result;
                 //File.WriteAllBytes("C:/Users/publi/Desktop/lastfak.pdf", downloadedinvoice);
