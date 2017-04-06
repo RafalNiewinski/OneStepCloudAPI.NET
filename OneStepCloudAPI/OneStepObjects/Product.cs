@@ -36,7 +36,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public OperatingSystem OperatingSystem { get; set; }
         public List<Resource> Resources { get; set; }
         public string Name { get; set; }
-        public string Icon_tag { get; set; }
+        public string IconTag { get; set; }
         public ProductPrices Prices { get; set; }
 
 
