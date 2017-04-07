@@ -77,7 +77,6 @@
     <Compile Include="OneStepObjects\OperatingSystem.cs" />
     <Compile Include="OneStepObjects\OSCID.cs" />
     <Compile Include="OneStepObjects\OSCLoginObject.cs" />
-    <Compile Include="OneStepObjects\OSCLoginObjectPrototype.cs" />
     <Compile Include="OneStepObjects\Payment.cs" />
     <Compile Include="OneStepObjects\PrivateNetwork.cs" />
     <Compile Include="OneStepObjects\Product.cs" />

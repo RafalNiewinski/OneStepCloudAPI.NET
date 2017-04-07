@@ -22,13 +22,6 @@ namespace OneStepCloudAPI
         public static int PoolingInterval = 5000; //5 Sec
         public static int TaskTimeout = 600000; //10 Min
 
-        public OSCLoginObjectPrototype LoginCredentials
-        {
-            get { return loginCredentials; }
-            set { loginCredentials = value; Authorized = false; }
-        }
-        private OSCLoginObjectPrototype loginCredentials;
-
         public bool Authorized { get; private set; }
         public VirtualMachinesManager VirtualMachines { get; private set; }
         public NetworkManager Network { get; private set; }
@@ -44,6 +37,17 @@ namespace OneStepCloudAPI
         public OneStepClient(OneStepRegion region)
         {
             requestManager = new OSCRequestManager(region);
+            Initialize();
+        }
+
+        public OneStepClient(string apiurl)
+        {
+            requestManager = new OSCRequestManager(apiurl);
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             VirtualMachines = new VirtualMachinesManager(requestManager);
             Network = new NetworkManager(requestManager);
             Billing = new BillingManager(requestManager);
@@ -57,18 +61,12 @@ namespace OneStepCloudAPI
         public async Task<SessionSummary> SessionSummary() { return await requestManager.GetSessionSummary(); }
         public async Task<string> MainenanceMessage() { return await requestManager.GetMaintenanceMessage(); }
 
-        public Task SignIn(string username, string password)
+        public async Task SignIn(string username, string password)
         {
-            LoginCredentials = new OSCLoginObjectPrototype { Username = username, Password = password };
-            return SignIn();
-        }
-
-        public async Task SignIn()
-        {
-            if (LoginCredentials.Username.Length == 0 || LoginCredentials.Password.Length == 0)
+            if (username.Length == 0 || password.Length == 0)
                 throw new InvalidOperationException("Username or password empty");
 
-            requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>("user/login", Method.POST, LoginCredentials, false);
+            requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>("user/login", Method.POST, new { Username = username, Password = password }, false);
 
             if (requestManager.AuthenticationData != null && requestManager.AuthenticationData != null && requestManager.AuthenticationData.AuthenticationToken != null)
                 Authorized = true;

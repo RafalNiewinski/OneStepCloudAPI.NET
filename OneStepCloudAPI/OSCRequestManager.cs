@@ -44,6 +44,14 @@ namespace OneStepCloudAPI
             }
         }
 
+        public OSCRequestManager(string apiurl)
+        {
+            Region = OneStepRegion.UNKNOWN;
+
+            apiurl = apiurl.TrimEnd('/');
+            restClient = new RestClient(apiurl);
+        }
+
         public OSCRequestManager(IRestClient restClient)
         {
             Region = OneStepRegion.UNKNOWN;
