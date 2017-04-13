@@ -38,12 +38,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task MakeCreditCardDefault(int ccid)
         {
-            await rm.SendRequest(String.Format("credit_cards/{0}", ccid), RestSharp.Method.PATCH, new { id = ccid });
+            await rm.SendRequest($"credit_cards/{ccid}", RestSharp.Method.PATCH, new { id = ccid });
         }
 
         public async Task DeleteCreditCard(int ccid)
         {
-            await rm.SendRequest(String.Format("credit_cards/{0}", ccid), RestSharp.Method.DELETE, new { id = ccid });
+            await rm.SendRequest($"credit_cards/{ccid}", RestSharp.Method.DELETE, new { id = ccid });
         }
 
         public Task<List<PromoCode>> GetPromoCodes()
@@ -68,12 +68,12 @@ namespace OneStepCloudAPI.Managers
 
         public Task<byte[]> DownloadInvoice(int id)
         {
-            return rm.SendRequest<byte[]>(String.Format("invoices/{0}.pdf", id));
+            return rm.SendRequest<byte[]>($"invoices/{id}.pdf");
         }
 
         public async Task PayInvoice(int id)
         {
-            await rm.SendRequest(String.Format("invoices/{0}", id), RestSharp.Method.PATCH, new { id = id });
+            await rm.SendRequest($"invoices/{id}", RestSharp.Method.PATCH, new { id = id });
         }
 
         public Task<List<VirtualMachineCost>> GetVirtualMachinesCosts()
@@ -83,7 +83,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<BillingTimeline> GetVirtualMachineCostTimeline(int vmid)
         {
-            return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>(String.Format("billing/cost_timeline/{0}", vmid)));
+            return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>($"billing/cost_timeline/{vmid}"));
         }
     }
 }

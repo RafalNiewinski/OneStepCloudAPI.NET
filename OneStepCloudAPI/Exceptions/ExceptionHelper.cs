@@ -16,7 +16,7 @@ namespace OneStepCloudAPI.Exceptions
             else if ((int)code == 404)
                 return new ResourceNotFoundException();
             else
-                return new ServerErrorException(code, String.Format("[{0}] {1}", code, message));
+                return new ServerErrorException(code, $"[{code}] {message}");
         }
     }
 }

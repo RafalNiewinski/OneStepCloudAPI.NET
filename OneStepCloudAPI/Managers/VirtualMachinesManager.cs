@@ -50,7 +50,7 @@ namespace OneStepCloudAPI.Managers
 
         public Task<VirtualMachine> Get(int id)
         {
-            return rm.SendRequest<VirtualMachine>(String.Format("virtual_machines/{0}", id));
+            return rm.SendRequest<VirtualMachine>($"virtual_machines/{id}");
         }
 
         public async Task<int> Create(VirtualMachinePrototype proto)
@@ -62,7 +62,7 @@ namespace OneStepCloudAPI.Managers
         {
             List<string> names = (await GetAll()).Select(x => x.NameTag).ToList();
 
-            await rm.SendRequest(String.Format("virtual_machines/{0}/configure", id), RestSharp.Method.POST, new { configuration_options = proto });
+            await rm.SendRequest($"virtual_machines/{id}/configure", RestSharp.Method.POST, new { configuration_options = proto });
 
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
@@ -81,13 +81,13 @@ namespace OneStepCloudAPI.Managers
                 disk_remove_requirements_performed = true
             };
 
-            await rm.SendRequest(String.Format("virtual_machines/{0}", vm.Id), RestSharp.Method.PATCH, editvars);
+            await rm.SendRequest($"virtual_machines/{vm.Id}", RestSharp.Method.PATCH, editvars);
             return await WaitForState(vm.Id, VirtualMachineStatus.idle);
         }
 
         public async Task Delete(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}", id), RestSharp.Method.DELETE, new { id });
+            await rm.SendRequest($"virtual_machines/{id}", RestSharp.Method.DELETE, new { id });
 
             List<VirtualMachineSummary> vms = await GetAll();
             var startTime = DateTime.Now;
@@ -105,37 +105,37 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> PowerOn(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/power_on", id), RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/power_on", RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> Suspend(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/suspend", id), RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/suspend", RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> PowerOff(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/shutdown", id), RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/shutdown", RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> Reboot(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/reboot", id), RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/reboot", RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> SnapshotCreate(int id)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/snapshots", id), RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/snapshots", RestSharp.Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> SnapshotRevert(int vmid, int snapid)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/snapshots/{1}", vmid, snapid), RestSharp.Method.PATCH, new { id = snapid });
+            await rm.SendRequest($"virtual_machines/{vmid}/snapshots/{snapid}", RestSharp.Method.PATCH, new { id = snapid });
             return await WaitForState(vmid, VirtualMachineStatus.idle);
         }
 
@@ -146,7 +146,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> SnapshotDelete(int id, int snapid)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/snapshots/{1}", id, snapid), RestSharp.Method.DELETE, new { id = snapid });
+            await rm.SendRequest($"virtual_machines/{id}/snapshots/{snapid}", RestSharp.Method.DELETE, new { id = snapid });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
@@ -157,7 +157,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> Rename(int vmid, string name)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/rename", vmid), RestSharp.Method.POST, new { name_tag = name });
+            await rm.SendRequest($"virtual_machines/{vmid}/rename", RestSharp.Method.POST, new { name_tag = name });
             return await Get(vmid);
         }
 
@@ -166,13 +166,13 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<List<VirtualMachinePermission>> GetPermissionsForUser(int vm, int user)
         {
-            string res = await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", vm, user));
+            string res = await rm.SendRequest($"virtual_machines/{vm}/permissions/{user}");
             return Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.permissions").ToObject<VirtualMachinePermission[]>().ToList();
         }
 
         public async Task<List<VirtualMachinePermission>> SetPermissionsForUser(int vm, int user, List<VirtualMachinePermission> perms)
         {
-            await rm.SendRequest(String.Format("virtual_machines/{0}/permissions/{1}", vm, user), RestSharp.Method.PATCH, new { permissions = perms });
+            await rm.SendRequest($"virtual_machines/{vm}/permissions/{user}", RestSharp.Method.PATCH, new { permissions = perms });
 
             return await GetPermissionsForUser(vm, user);
         }

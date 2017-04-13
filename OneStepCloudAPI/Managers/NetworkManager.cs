@@ -37,7 +37,7 @@ namespace OneStepCloudAPI.Managers
 
         public Task<PublicNetwork> GetNetwork(int netid)
         {
-            return rm.SendRequest<PublicNetwork>(String.Format("public_networks/{0}", netid));
+            return rm.SendRequest<PublicNetwork>($"public_networks/{netid}");
         }
 
         public async Task<PublicNetwork> Create()
@@ -49,7 +49,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task Delete(int netid)
         {
-            await rm.SendRequest(String.Format("public_networks/{0}", netid), RestSharp.Method.DELETE);
+            await rm.SendRequest($"public_networks/{netid}", RestSharp.Method.DELETE);
 
             List<PublicNetworkSummary> nets = await GetNetworks();
             var startTime = DateTime.Now;
@@ -106,7 +106,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task DeleteNat(int natid)
         {
-            await rm.SendRequest(String.Format("nats/{0}", natid), RestSharp.Method.DELETE, new { id = natid });
+            await rm.SendRequest($"nats/{natid}", RestSharp.Method.DELETE, new { id = natid });
 
             var nats = await GetNatsFlatten();
             var startTime = DateTime.Now;

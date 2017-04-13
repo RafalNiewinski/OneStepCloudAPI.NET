@@ -43,7 +43,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task DeleteSshKey(int keyid)
         {
-            await rm.SendRequest(String.Format("user/keys/{0}", keyid), RestSharp.Method.DELETE, new { id = keyid });
+            await rm.SendRequest($"user/keys/{keyid}", RestSharp.Method.DELETE, new { id = keyid });
         }
 
         #region GROUP DELETE

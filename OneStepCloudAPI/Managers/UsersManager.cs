@@ -25,8 +25,8 @@ namespace OneStepCloudAPI.Managers
 
             foreach (var user in users)
             {
-                string details = await rm.SendRequest(String.Format("users/{0}", user.Id));
-                string permissions = await rm.SendRequest(String.Format("users/{0}/permissions", user.Id));
+                string details = await rm.SendRequest($"users/{user.Id}");
+                string permissions = await rm.SendRequest($"users/{user.Id}/permissions");
 
                 user.UserDetail = Newtonsoft.Json.Linq.JObject.Parse(details).SelectToken("$.user_detail").ToObject<UserDetail>();
                 user.Permissions = Newtonsoft.Json.Linq.JObject.Parse(permissions).SelectToken("$.permissions").ToObject<UserPermission[]>().ToList();
@@ -37,7 +37,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<User> UpdateUserDetails(User user)
         {
-            await rm.SendRequest(String.Format("users/{0}", user.Id), RestSharp.Method.PATCH, new { user_detail = user.UserDetail });
+            await rm.SendRequest($"users/{user.Id}", RestSharp.Method.PATCH, new { user_detail = user.UserDetail });
 
             var users = await GetAll();
             return users.Where(x => x.Id == user.Id).First();
@@ -45,7 +45,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<User> UpdatePermissions(User user)
         {
-            await rm.SendRequest(String.Format("users/{0}/permissions", user.Id), RestSharp.Method.PUT, new { permissions = user.Permissions });
+            await rm.SendRequest($"users/{user.Id}/permissions", RestSharp.Method.PUT, new { permissions = user.Permissions });
 
             var users = await GetAll();
             return users.Where(x => x.Id == user.Id).First();
@@ -117,12 +117,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task CancelInvitation(Invitation invite)
         {
-            await rm.SendRequest(String.Format("invitation/{0}", invite.InvitationToken), RestSharp.Method.DELETE, new { id = invite.InvitationToken });
+            await rm.SendRequest($"invitation/{invite.InvitationToken}", RestSharp.Method.DELETE, new { id = invite.InvitationToken });
         }
 
         public async Task DeleteUser(int user)
         {
-            await rm.SendRequest(String.Format("users/{0}", user), RestSharp.Method.DELETE);
+            await rm.SendRequest($"users/{user}", RestSharp.Method.DELETE);
         }
     }
 }

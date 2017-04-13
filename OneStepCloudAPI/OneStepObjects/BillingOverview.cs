@@ -16,7 +16,7 @@ namespace OneStepCloudAPI.OneStepObjects
         {
             get
             {
-                return String.Format("{0} - {1}", PeriodStart.ToString("MM-dd-yyyy"), PeriodEnd.ToString("MM-dd-yyyy"));
+                return $"{PeriodStart.ToString("MM-dd-yyyy")} - {PeriodEnd.ToString("MM-dd-yyyy")}";
             }
             set
             {

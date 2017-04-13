@@ -93,14 +93,14 @@ namespace OneStepCloudAPIClient
                 //uscl.Users.DeleteUser(users.Where(x => x.id == 57).First()).Wait();
 
                 GroupLimits limits = uscl.SessionSummary().Result.GroupLimits;
-                Console.WriteLine(String.Format("Summary vms: {0}/{1}", limits.Vms.Current, limits.Vms.Limit));
+                Console.WriteLine($"Summary vms: {limits.Vms.Current}/{limits.Vms.Limit}");
 
                 Console.WriteLine("Maintenance: " + uscl.MainenanceMessage().Result);
 
                 Console.WriteLine("Virtual Machines:");
                 var vms = uscl.VirtualMachines.GetAllDetailed().Result;
                 foreach (var vm in vms)
-                    Console.WriteLine(String.Format("    - {0} - {1} - {2} - {3} - CPU: {4} - MEM: {5} - STORAGE: {6} - {7}", vm.Id, vm.NameTag, vm.CreatedAt, vm.Username, vm.Cpu, vm.MemoryMb, vm.StorageGb, vm.PrivateNetworks.First().IpAddress));
+                    Console.WriteLine($"    - {vm.Id} - {vm.NameTag} - {vm.CreatedAt} - {vm.Username} - CPU: {vm.Cpu} - MEM: {vm.MemoryMb} - STORAGE: {vm.StorageGb} - {vm.PrivateNetworks.First().IpAddress}");
 
                 PrintNetworks(uscl);
 
@@ -186,11 +186,11 @@ namespace OneStepCloudAPIClient
                 Console.WriteLine("Cost Timeline:");
                 Console.WriteLine("    Entries:");
                 foreach (var entry in costtimeline.GetEntries())
-                    Console.WriteLine(String.Format("        - {0} - {1} - {2} - {3}", entry.Date, entry.GetNumericCost(), entry.GetNumericComputingCost(), entry.GetNumericStorageCost()));
+                    Console.WriteLine($"        - {entry.Date} - {entry.GetNumericCost()} - {entry.GetNumericComputingCost()} - {entry.GetNumericStorageCost()}");
                 Console.WriteLine("Credit Cards:");
                 var ccs = uscl.Billing.GetCreditCards().Result;
                 foreach (var cc in ccs)
-                    Console.WriteLine(String.Format("    - {0} - {1} {2}", cc.CreditCardNumber, cc.CreditCardType, cc.IsDefault ? "*" : ""));
+                    Console.WriteLine($"    - {cc.CreditCardNumber} - {cc.CreditCardType} {(cc.IsDefault ? "*" : "")}");
                 /*uscl.Billing.AddCreditCard(
                     new BillingInformation
                     {
@@ -220,7 +220,7 @@ namespace OneStepCloudAPIClient
                 Console.WriteLine("Used Promo Codes:");
                 var pcs = uscl.Billing.GetPromoCodes().Result;
                 foreach (var pc in pcs)
-                    Console.WriteLine(String.Format("    - {0} - {1} - {2}", pc.UsedAt, pc.Code, pc.Amount));
+                    Console.WriteLine($"    - {pc.UsedAt} - {pc.Code} - {pc.Amount}");
                 //uscl.Billing.ApplyPromoCode("VAGRANT").Wait();
 
                 var payments = uscl.Billing.GetPaymentHistory().Result;
@@ -232,7 +232,7 @@ namespace OneStepCloudAPIClient
                 var invoices = uscl.Billing.GetInvoices().Result;
                 Console.WriteLine("Invoices:");
                 foreach (var invoice in invoices)
-                    Console.WriteLine(String.Format("    - {0} ({1} - {2}) - {3} - PAID: {4} (due: {5})  => {6}", invoice.IssuedAt.ToShortDateString(), invoice.PeriodStart.ToShortDateString(), invoice.PeriodEnd.ToShortDateString(), invoice.Status, invoice.PaidAt.ToShortDateString(), invoice.DueAt.ToShortDateString(), invoice.Total));
+                    Console.WriteLine($"    - {invoice.IssuedAt.ToShortDateString()} ({invoice.PeriodStart.ToShortDateString()} - {invoice.PeriodEnd.ToShortDateString()}) - {invoice.Status} - PAID: {invoice.PaidAt.ToShortDateString()} (due: {invoice.DueAt.ToShortDateString()})  => {invoice.Total}");
 
                 Console.WriteLine("Trying to pay all unpaid invoices");
                 foreach (var invoice in invoices.Where(i => i.Status == InvoiceStatus.unpaid))
@@ -245,12 +245,12 @@ namespace OneStepCloudAPIClient
                 var vmscosts = uscl.Billing.GetVirtualMachinesCosts().Result;
                 Console.WriteLine("Current cost per vm:");
                 foreach (var vmcost in vmscosts)
-                    Console.WriteLine(String.Format("    - {0} - {1} CPU - {2} MEM - {3} DISK - Status: {4}   => {5}", vmcost.NameTag, vmcost.Cpu, vmcost.MemoryMb, vmcost.StorageGb, vmcost.Status, vmcost.Cost));
+                    Console.WriteLine($"    - {vmcost.NameTag} - {vmcost.Cpu} CPU - {vmcost.MemoryMb} MEM - {vmcost.StorageGb} DISK - Status: {vmcost.Status}   => {vmcost.Cost}");
 
                 var vmcosttimeline = uscl.Billing.GetVirtualMachineCostTimeline(315).Result;
                 Console.WriteLine("VM 315 CONST TIMELINE:");
                 foreach (var entry in vmcosttimeline.GetEntries())
-                    Console.WriteLine(String.Format("        - {0} - {1} - {2} - {3}", entry.Date, entry.GetNumericCost(), entry.GetNumericComputingCost(), entry.GetNumericStorageCost()));
+                    Console.WriteLine($"        - {entry.Date} - {entry.GetNumericCost()} - {entry.GetNumericComputingCost()} - {entry.GetNumericStorageCost()}");
 
                 var accountdetails = uscl.Account.GetAccountDetails().Result;
                 Console.WriteLine("CURRENT USER: " + accountdetails.FirstName + " " + accountdetails.LastName + " (" + accountdetails.PhoneNumber + ", " + accountdetails.MobileNumber + ")");
@@ -262,7 +262,7 @@ namespace OneStepCloudAPIClient
                 var sshkeys = uscl.Account.GetSshKeys().Result;
                 Console.WriteLine("SSH KEYS:");
                 foreach (var key in sshkeys)
-                    Console.WriteLine(String.Format("    - {0} - {1} - {2} - {3}", key.Id, key.Name, key.Fingerprint, key.CreatedAt));
+                    Console.WriteLine($"    - {key.Id} - {key.Name} - {key.Fingerprint} - {key.CreatedAt}");
 
                 uscl.Account.AddSshKey("KLUCZ", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuJkbvCWyQE6gMXqRCcp/MFb0Ejw8ifoBI350Tub/wHFmXhYshj9615nQty/zu8BraTkRJw3+cn7R/Z02T5gXpn+j+23xcNyOZPDbOtCId5CTdBj0vPCezZvSDYG1uyzTWhEKtBTBrW/R2Vng7de39MZde5aWC08c5kmV9B7HDumgs51O4rnlpgwOlr2Ch2urlMqz5T6hPJlLxTgTE1SicBNzOR7QwwFmxQjE2KEsvPLPdKRs7KIBI5aKgPgm4bJMaQb/T8rlm+nrgnJ4gBidp5O1PHSYQIVNZpvBFVORTWLvxFzL9jlH5PLTRLB2Lk7AfjapJs72yPj18oGOLzyZh Rafal@DESKTOP").Wait();
                 sshkeys = uscl.Account.GetSshKeys().Result;
@@ -277,19 +277,19 @@ namespace OneStepCloudAPIClient
                 var templates = uscl.VirtualMachines.GetTemplates().Result;
                 foreach (var t in templates)
                 {
-                    Console.WriteLine(String.Format("    - {0} - {8} - CPU({1}-{2}) - MEM({3}-{4}) - STORAGE({5}*{6}-{7})", t.Id, t.MinimumCpu, t.MaximumCpu, t.MinimumMemoryMb, t.MaximumMemoryMb, t.MaximumAdditionalDisks, t.MinimumStorageGb, t.MaximumStorageGb, t.Name));
-                    Console.WriteLine(String.Format("        OS => {0} - {1} - {2} - DISK: {3}", t.OperatingSystem.Id, t.OperatingSystem.Name, t.OperatingSystem.SystemType, t.OperatingSystem.StorageGb));
+                    Console.WriteLine($"    - {t.Id} - {t.Name} - CPU({t.MinimumCpu}-{t.MaximumCpu}) - MEM({t.MinimumMemoryMb}-{t.MaximumMemoryMb}) - STORAGE({t.MaximumAdditionalDisks}*{t.MinimumStorageGb}-{t.MaximumStorageGb})");
+                    Console.WriteLine($"        OS => {t.OperatingSystem.Id} - {t.OperatingSystem.Name} - {t.OperatingSystem.SystemType} - DISK: {t.OperatingSystem.StorageGb}");
                 }
 
                 Console.WriteLine("PRODUCTS:");
                 var products = uscl.VirtualMachines.GetProducts().Result;
                 foreach(var p in products)
                 {
-                    Console.WriteLine(String.Format("    - {0} - {1}", p.Id, p.Name));
+                    Console.WriteLine($"    - {p.Id} - {p.Name}");
                     foreach(var t in p.Products)
                     {
-                        Console.WriteLine(String.Format("        - {0} - {8} - CPU({1}-{2}) - MEM({3}-{4}) - STORAGE({5}*{6}-{7})", t.Id, t.MinimumCpu, t.MaximumCpu, t.MinimumMemoryMb, t.MaximumMemoryMb, t.MaximumAdditionalDisks, t.MinimumStorageGb, t.MaximumStorageGb, t.Name));
-                        Console.WriteLine(String.Format("            OS => {0} - {1} - {2} - DISK: {3}", t.OperatingSystem.Id, t.OperatingSystem.Name, t.OperatingSystem.SystemType, t.OperatingSystem.StorageGb));
+                        Console.WriteLine($"        - {t.Id} - {t.Name} - CPU({t.MinimumCpu}-{t.MaximumCpu}) - MEM({t.MinimumMemoryMb}-{t.MaximumMemoryMb}) - STORAGE({t.MaximumAdditionalDisks}*{t.MinimumStorageGb}-{t.MaximumStorageGb})");
+                        Console.WriteLine($"            OS => {t.OperatingSystem.Id} - {t.OperatingSystem.Name} - {t.OperatingSystem.SystemType} - DISK: {t.OperatingSystem.StorageGb}");
                     }
                 }
 
@@ -335,7 +335,7 @@ namespace OneStepCloudAPIClient
                 {
                     Console.WriteLine("        - NATS:");
                     foreach (var nat in net.Nats)
-                        Console.WriteLine(String.Format("            - {0}({1}) - {5} - {4}    -    {2} => {3}", nat.VirtualMachineNameTag, nat.VirtualMachineId, nat.SourcePortRange, nat.DestinationPortRange, nat.Status.ToString(), nat.Protocol.ToString()));
+                        Console.WriteLine($"            - {nat.VirtualMachineNameTag}({nat.VirtualMachineId}) - {nat.Protocol.ToString()} - {nat.Status.ToString()}    -    {nat.SourcePortRange} => {nat.DestinationPortRange}");
                 }
             }
         }
