@@ -45,5 +45,22 @@ namespace OneStepCloudAPI.Managers
         {
             await rm.SendRequest(String.Format("user/keys/{0}", keyid), RestSharp.Method.DELETE, new { id = keyid });
         }
+
+        #region GROUP DELETE
+        public Task<GroupDeleteChecklist> GroupDeleteChecklist()
+        {
+            return rm.SendRequest<GroupDeleteChecklist>("group/precheck_list");
+        }
+
+        public async Task GenerateEndingInvoice()
+        {
+            await rm.SendRequest("group/ending_invoice", RestSharp.Method.POST);
+        }
+
+        public async Task DeleteGroupPermanently()
+        {
+            await rm.SendRequest("group/goodbye", RestSharp.Method.POST);
+        }
+        #endregion
     }
 }

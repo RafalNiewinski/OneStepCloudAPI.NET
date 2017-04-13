@@ -68,6 +68,7 @@
     <Compile Include="OneStepObjects\BillingTimeline.cs" />
     <Compile Include="OneStepObjects\CreditCard.cs" />
     <Compile Include="OneStepObjects\CreditCardDetail.cs" />
+    <Compile Include="OneStepObjects\GroupDeleteChecklist.cs" />
     <Compile Include="OneStepObjects\GroupLimits.cs" />
     <Compile Include="OneStepObjects\InfrastructureSummary.cs" />
     <Compile Include="OneStepObjects\Invitation.cs" />

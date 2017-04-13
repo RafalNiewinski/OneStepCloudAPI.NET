@@ -68,8 +68,33 @@ namespace OneStepCloudAPI
 
             requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>("user/login", Method.POST, new { Username = username, Password = password }, false);
 
-            if (requestManager.AuthenticationData != null && requestManager.AuthenticationData != null && requestManager.AuthenticationData.AuthenticationToken != null)
+            if (requestManager.AuthenticationData != null && requestManager.AuthenticationData.Email != null && requestManager.AuthenticationData.AuthenticationToken != null)
                 Authorized = true;
+        }
+
+        public async Task Register(string email, string username, string password)
+        {
+            if (email.Length == 0 || username.Length == 0 || password.Length == 0)
+                throw new InvalidOperationException("Username or password empty");
+
+            requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>("users", Method.POST, new
+            {
+                User = new
+                {
+                    AcceptedTermsAndConditions = true,
+                    Email = email,
+                    Username = username,
+                    Password = password
+                }
+            }, false);
+
+            if (requestManager.AuthenticationData != null && requestManager.AuthenticationData.Email != null && requestManager.AuthenticationData.AuthenticationToken != null)
+                Authorized = true;
+        }
+
+        public async Task ConfirmAccount(string code)
+        {
+            await requestManager.SendRequest($"users/confirm?confirmation_token={code}", Method.GET, new { }, false);
         }
 
         public Task<Dictionary<string, string>> GetOSCPrices()
