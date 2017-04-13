@@ -16,9 +16,9 @@ namespace OneStepCloudAPI.Managers
             this.rm = rm;
         }
 
-        public async Task<UserDetail> GetAccountDetails()
+        public Task<UserDetail> GetAccountDetails()
         {
-            return await rm.SendRequest<UserDetail>("user/profile");
+            return rm.SendRequest<UserDetail>("user/profile");
         }
 
         public async Task UpdateAccountDetails(UserDetail details)
@@ -31,9 +31,9 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest("user/change_password", RestSharp.Method.POST, new { current_password = oldpassword, password = newpassword, password_confirmation = newpassword });
         }
 
-        public async Task<List<SshKey>> GetSshKeys()
+        public Task<List<SshKey>> GetSshKeys()
         {
-            return await rm.SendRequest<List<SshKey>>("user/keys");
+            return rm.SendRequest<List<SshKey>>("user/keys");
         }
 
         public async Task<int> AddSshKey(string name, string key)

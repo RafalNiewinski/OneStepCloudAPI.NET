@@ -16,9 +16,9 @@ namespace OneStepCloudAPI.Managers
             this.rm = rm;
         }
 
-        public async Task<BillingOverview> GetOverview()
+        public Task<BillingOverview> GetOverview()
         {
-            return await rm.SendRequest<BillingOverview>("billing/overview");
+            return rm.SendRequest<BillingOverview>("billing/overview");
         }
 
         public async Task<BillingTimeline> GetCostTimeline()
@@ -26,9 +26,9 @@ namespace OneStepCloudAPI.Managers
             return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>("billing/cost_timeline"));
         }
 
-        public async Task<List<CreditCard>> GetCreditCards()
+        public Task<List<CreditCard>> GetCreditCards()
         {
-            return await rm.SendRequest<List<CreditCard>>("credit_cards");
+            return rm.SendRequest<List<CreditCard>>("credit_cards");
         }
 
         public async Task AddCreditCard(BillingInformation billdata, CreditCardDetail cc)
@@ -46,9 +46,9 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest(String.Format("credit_cards/{0}", ccid), RestSharp.Method.DELETE, new { id = ccid });
         }
 
-        public async Task<List<PromoCode>> GetPromoCodes()
+        public Task<List<PromoCode>> GetPromoCodes()
         {
-            return await rm.SendRequest<List<PromoCode>>("promocode");
+            return rm.SendRequest<List<PromoCode>>("promocode");
         }
 
         public async Task ApplyPromoCode(string code)
@@ -56,29 +56,29 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest("promocode", RestSharp.Method.POST, new { code = code });
         }
 
-        public async Task<List<Payment>> GetPaymentHistory()
+        public Task<List<Payment>> GetPaymentHistory()
         {
-            return await rm.SendRequest<List<Payment>>("billing/payment_history");
+            return rm.SendRequest<List<Payment>>("billing/payment_history");
         }
 
-        public async Task<List<Invoice>> GetInvoices()
+        public Task<List<Invoice>> GetInvoices()
         {
-            return await rm.SendRequest<List<Invoice>>("invoices");
+            return rm.SendRequest<List<Invoice>>("invoices");
         }
 
-        public async Task<byte[]> DownloadInvoice(int id)
+        public Task<byte[]> DownloadInvoice(int id)
         {
-            return await rm.SendRequest<byte[]>(String.Format("invoices/{0}.pdf", id));
+            return rm.SendRequest<byte[]>(String.Format("invoices/{0}.pdf", id));
         }
 
-        public Task PayInvoice(int id)
+        public async Task PayInvoice(int id)
         {
-            return rm.SendRequest(String.Format("invoices/{0}", id), RestSharp.Method.PATCH, new { id = id });
+            await rm.SendRequest(String.Format("invoices/{0}", id), RestSharp.Method.PATCH, new { id = id });
         }
 
-        public async Task<List<VirtualMachineCost>> GetVirtualMachinesCosts()
+        public Task<List<VirtualMachineCost>> GetVirtualMachinesCosts()
         {
-            return await rm.SendRequest<List<VirtualMachineCost>>("billing/detailed_summary");
+            return rm.SendRequest<List<VirtualMachineCost>>("billing/detailed_summary");
         }
 
         public async Task<BillingTimeline> GetVirtualMachineCostTimeline(int vmid)

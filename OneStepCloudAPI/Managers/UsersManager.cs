@@ -105,9 +105,9 @@ namespace OneStepCloudAPI.Managers
             return Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.valid").ToObject<bool>();
         }
 
-        public async Task<List<Invitation>> GetInvitations()
+        public Task<List<Invitation>> GetInvitations()
         {
-            return await rm.SendRequest<List<Invitation>>("invitation");
+            return rm.SendRequest<List<Invitation>>("invitation");
         }
 
         public async Task<int> SendInvitation(string email, string username)

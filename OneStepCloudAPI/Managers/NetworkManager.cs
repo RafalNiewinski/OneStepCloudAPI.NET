@@ -35,9 +35,9 @@ namespace OneStepCloudAPI.Managers
             return detailed;
         }
 
-        public async Task<PublicNetwork> GetNetwork(int netid)
+        public Task<PublicNetwork> GetNetwork(int netid)
         {
-            return await rm.SendRequest<PublicNetwork>(String.Format("public_networks/{0}", netid));
+            return rm.SendRequest<PublicNetwork>(String.Format("public_networks/{0}", netid));
         }
 
         public async Task<PublicNetwork> Create()
