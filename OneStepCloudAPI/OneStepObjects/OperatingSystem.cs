@@ -16,6 +16,8 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Version { get; set; }
+        public string VersionFull { get; set; }
 
         public static implicit operator int(OperatingSystemSummary os) { return os.Id; }
     }
@@ -25,5 +27,6 @@ namespace OneStepCloudAPI.OneStepObjects
         public int StorageGb { get; set; }
         public SystemType SystemType { get; set; }
         public string IconTag { get; set; }
+        public string ShortName { get; set; }
     }
 }
