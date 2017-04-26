@@ -39,7 +39,7 @@ namespace OneStepCloudAPI
                     restClient = new RestClient("https://onestepcloud.com/api");
                     break;
                 case OneStepRegion.PL:
-                    restClient = new RestClient("https://beta.onestepcloud.pl/api");
+                    restClient = new RestClient("https://panel.onestepcloud.pl/api");
                     break;
             }
         }
