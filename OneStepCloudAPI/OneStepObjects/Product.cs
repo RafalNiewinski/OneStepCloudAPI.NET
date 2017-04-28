@@ -27,6 +27,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string CpuLabels { get; set; }
         public string MemoryLabels { get; set; }
         public string StorageLabels { get; set; }
+        public string IconTag { get; set; }
 
         public static implicit operator int(ProductSummary prod) { return prod.Id; }
     }
@@ -36,7 +37,6 @@ namespace OneStepCloudAPI.OneStepObjects
         public OperatingSystem OperatingSystem { get; set; }
         public List<Resource> Resources { get; set; }
         public string Name { get; set; }
-        public string IconTag { get; set; }
         public ProductPrices Prices { get; set; }
 
 
