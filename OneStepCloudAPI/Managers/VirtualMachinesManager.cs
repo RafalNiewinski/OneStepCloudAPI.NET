@@ -60,8 +60,6 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> Configure(int id, VirtualMachineConfigurationPrototype proto)
         {
-            List<string> names = (await GetAll()).Select(x => x.NameTag).ToList();
-
             await rm.SendRequest($"virtual_machines/{id}/configure", RestSharp.Method.POST, new { configuration_options = proto });
 
             return await WaitForState(id, VirtualMachineStatus.idle);
