@@ -10,6 +10,8 @@ using OneStepCloudAPI.Exceptions;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Linq;
 
 namespace OneStepCloudAPI.Managers
 {
@@ -58,7 +60,21 @@ namespace OneStepCloudAPI.Managers
             return await rm.SendRequest<OSCID>("virtual_machines", RestSharp.Method.POST, proto);
         }
 
-        public async Task<VirtualMachine> Configure(int id, VirtualMachineConfigurationPrototype proto)
+        public async Task<JSchema> GetConfigurationSchema(int id)
+        {
+            var data = await rm.SendRequest<string>($"virtual_machines/{id}/configure");
+
+            try
+            {
+                JToken obj = JToken.Parse(data);
+                obj = obj["configuration_options"];
+                JSchema schema = JSchema.Parse(obj.ToString());
+                return schema;
+            }
+            catch { throw new ServerErrorException(0, "Invalid Server Reply"); }
+        }
+
+        public async Task<VirtualMachine> Configure(int id, dynamic proto)
         {
             await rm.SendRequest($"virtual_machines/{id}/configure", RestSharp.Method.POST, new { configuration_options = proto });
 

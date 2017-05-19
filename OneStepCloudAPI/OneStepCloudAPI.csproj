@@ -34,6 +34,10 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.2.0.11\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -90,7 +94,6 @@
     <Compile Include="OneStepObjects\SshKey.cs" />
     <Compile Include="OneStepObjects\User.cs" />
     <Compile Include="OneStepObjects\VirtualMachine.cs" />
-    <Compile Include="OneStepObjects\VirtualMachineConfigurationPrototype.cs" />
     <Compile Include="OneStepObjects\VirtualMachineCost.cs" />
     <Compile Include="OneStepObjects\VirtualMachineDisk.cs" />
     <Compile Include="OneStepObjects\VirtualMachineNAT.cs" />

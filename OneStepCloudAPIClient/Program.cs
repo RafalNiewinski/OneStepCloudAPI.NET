@@ -1,4 +1,5 @@
-﻿using OneStepCloudAPI;
+﻿using Newtonsoft.Json.Schema;
+using OneStepCloudAPI;
 using OneStepCloudAPI.Exceptions;
 using OneStepCloudAPI.OneStepObjects;
 using System;
@@ -293,6 +294,24 @@ namespace OneStepCloudAPIClient
                     }
                 }
 
+
+                Console.WriteLine("CONFIGURATION SCHEMA (HAPROXY):");
+                var dokonfigu = uscl.VirtualMachines.Get(781).Result;
+                var config = uscl.VirtualMachines.GetConfigurationSchema(dokonfigu).Result;
+                foreach (var prop in config.Properties)
+                {
+                    Console.WriteLine("    - " + prop.Key + " - " + prop.Value.Type + (prop.Value.Pattern != null ? $" ({prop.Value.Pattern})" : ""));
+                    if (prop.Value.Type == JSchemaType.Array && prop.Value.Items.Count > 0)
+                    {
+                        foreach (var item in prop.Value.Items)
+                        {
+                            Console.WriteLine("        - " + item.Title + " - " + item.Type);
+                            foreach (var iprop in item.Properties)
+                                Console.WriteLine("            - " + iprop.Key + " - " + iprop.Value.Type + (iprop.Value.Pattern != null ? $" ({iprop.Value.Pattern})" : ""));
+                        }
+                    }
+                }
+
                 //PrepareLBTestClients();
             }
             catch (AggregateException e)
@@ -350,8 +369,8 @@ namespace OneStepCloudAPIClient
             vms[0] = cl.VirtualMachines.Create(vm.GetPrototype()).Result;
             vms[1] = cl.VirtualMachines.Create(vm.GetPrototype()).Result;
 
-            cot[0] = cl.VirtualMachines.Configure(vms[0], new VirtualMachineConfigurationPrototype { VirtualMachineName = "VVV" + 0 });
-            cot[1] = cl.VirtualMachines.Configure(vms[1], new VirtualMachineConfigurationPrototype { VirtualMachineName = "VVV" + 1 });
+            cot[0] = cl.VirtualMachines.Configure(vms[0], new { VirtualMachineName = "VVV" + 0 });
+            cot[1] = cl.VirtualMachines.Configure(vms[1], new { VirtualMachineName = "VVV" + 1 });
 
             Task.WaitAll(cot);
             vms[0] = cot[0].Result.Id;
@@ -395,7 +414,7 @@ namespace OneStepCloudAPIClient
 
             for (int i = 0; i < 8; i++)
             {
-                creationJobs[i] = cl.VirtualMachines.Configure(vms[i], new VirtualMachineConfigurationPrototype() { VirtualMachineName = "client5" + i });
+                creationJobs[i] = cl.VirtualMachines.Configure(vms[i], new { VirtualMachineName = "client5" + i });
                 Thread.Sleep(300);
             }
 
