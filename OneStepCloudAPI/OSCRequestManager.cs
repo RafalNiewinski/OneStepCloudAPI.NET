@@ -36,7 +36,7 @@ namespace OneStepCloudAPI
             switch (Region)
             {
                 case OneStepRegion.US:
-                    restClient = new RestClient("https://onestepcloud.com/api");
+                    restClient = new RestClient("https://panel.onestepcloud.com/api");
                     break;
                 case OneStepRegion.PL:
                     restClient = new RestClient("https://panel.onestepcloud.pl/api");
