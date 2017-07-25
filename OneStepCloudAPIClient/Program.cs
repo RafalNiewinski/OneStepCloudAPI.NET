@@ -93,7 +93,12 @@ namespace OneStepCloudAPIClient
 
                 //uscl.Users.DeleteUser(users.Where(x => x.id == 57).First()).Wait();
 
-                GroupLimits limits = uscl.SessionSummary().Result.GroupLimits;
+                SessionSummary ss = uscl.SessionSummary().Result;
+                Console.WriteLine($"Current User Permissions ({ss.Username}):");
+                foreach (var perm in ss.Permissions)
+                    Console.WriteLine($"    - {perm.ToString()}");
+
+                GroupLimits limits = ss.GroupLimits;
                 Console.WriteLine($"Summary vms: {limits.Vms.Current}/{limits.Vms.Limit}");
 
                 Console.WriteLine("Maintenance: " + uscl.MainenanceMessage().Result);
