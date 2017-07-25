@@ -23,7 +23,7 @@ namespace OneStepCloudAPI
         readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
         {
             NullValueHandling = NullValueHandling.Ignore,
-            Converters = new List<JsonConverter> { new StringEnumConverter(true) },
+            Converters = new List<JsonConverter> { new TolerantEnumConverter() },
             ContractResolver = new UnderscorePropertyNamesContractResolver()
         };
 

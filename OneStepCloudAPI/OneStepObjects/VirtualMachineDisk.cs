@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum VirtualMachineDiskStorageType
     {
+        unknown,
         optimal,
         performance
     }

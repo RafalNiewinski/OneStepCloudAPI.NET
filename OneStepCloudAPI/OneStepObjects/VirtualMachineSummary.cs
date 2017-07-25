@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum VirtualMachinePowerState
     {
+        unknown,
         powered_off,
         suspended,
         powered_on
@@ -17,6 +18,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
     public enum VirtualMachineStatus
     {
+        unknown,
         idle,
         error,
         busy,
@@ -27,6 +29,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
     public enum VirtualMachinePermission
     {
+        unknown,
         virtual_machine_configure,
         virtual_machine_view,
         virtual_machine_update,

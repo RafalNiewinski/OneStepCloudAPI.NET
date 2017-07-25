@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum NetworkResourceStatus
     {
+        unknown,
         idle,
         busy,
         error
@@ -17,6 +18,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
     public enum NetworkProtocol
     {
+        unknown,
         tcp,
         udp
     }

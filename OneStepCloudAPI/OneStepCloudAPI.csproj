@@ -103,6 +103,7 @@
     <Compile Include="OneStepObjects\VirtualMachineTask.cs" />
     <Compile Include="OSCRequestManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TolerantEnumConverter.cs" />
     <Compile Include="UnderscorePropertyNamesContractResolver.cs" />
   </ItemGroup>
   <ItemGroup />

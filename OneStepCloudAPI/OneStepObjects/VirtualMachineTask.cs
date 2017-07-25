@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum VirtualMachineTaskStatus
     {
+        unknown,
         finished,
         error,
         running

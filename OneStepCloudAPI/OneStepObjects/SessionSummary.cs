@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum UserPermission
     {
+        unknown,
         virtual_machine_create,
         networking_manage,
         public_ip_request,
@@ -28,6 +29,7 @@ namespace OneStepCloudAPI.OneStepObjects
 
     public enum GroupStatus
     {
+        unknown = 99,
         account_created = 0,
         account_verified = 1,
         payment_created = 2,

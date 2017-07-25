@@ -25,11 +25,11 @@ namespace OneStepCloudAPI.Managers
 
             foreach (var user in users)
             {
-                string details = await rm.SendRequest($"users/{user.Id}");
-                string permissions = await rm.SendRequest($"users/{user.Id}/permissions");
+                User details = await rm.SendRequest<User>($"users/{user.Id}");
+                User permissions = await rm.SendRequest<User>($"users/{user.Id}/permissions");
 
-                user.UserDetail = Newtonsoft.Json.Linq.JObject.Parse(details).SelectToken("$.user_detail").ToObject<UserDetail>();
-                user.Permissions = Newtonsoft.Json.Linq.JObject.Parse(permissions).SelectToken("$.permissions").ToObject<UserPermission[]>().ToList();
+                user.UserDetail = details.UserDetail;
+                user.Permissions = permissions.Permissions;
             }
 
             return users;

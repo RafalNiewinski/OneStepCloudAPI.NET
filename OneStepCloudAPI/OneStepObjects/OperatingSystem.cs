@@ -8,6 +8,7 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public enum SystemType
     {
+        Unknown,
         Windows,
         Linux
     }
