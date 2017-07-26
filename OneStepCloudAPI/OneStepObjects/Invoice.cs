@@ -22,6 +22,7 @@ namespace OneStepCloudAPI.OneStepObjects
     public class Invoice
     {
         public int Id { get; set; }
+        public string InvoiceNumber { get; set; }
         public string Total { get; set; }
         public InvoiceStatus Status { get; set; }
         public DateTime PeriodStart { get; set; }

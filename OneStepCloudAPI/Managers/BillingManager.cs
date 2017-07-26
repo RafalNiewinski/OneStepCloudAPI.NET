@@ -21,6 +21,11 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<BillingOverview>("billing/overview");
         }
 
+        public Task<List<InvoiceItem>> GetCurrentInvoiceItems()
+        {
+            return rm.SendRequest<List<InvoiceItem>>("billing/current_invoice");
+        }
+
         public async Task<BillingTimeline> GetCostTimeline()
         {
             return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>("billing/cost_timeline"));

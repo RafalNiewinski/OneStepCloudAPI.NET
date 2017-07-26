@@ -26,6 +26,7 @@ namespace OneStepCloudAPI
         public VirtualMachinesManager VirtualMachines { get; private set; }
         public NetworkManager Network { get; private set; }
         public BillingManager Billing { get; private set; }
+        public MarketplaceManager Marketplace { get; private set; }
         public AccountManager Account { get; private set; }
         public UsersManager Users { get; private set; }
         public VpnManager Vpn { get; private set; }
@@ -51,6 +52,7 @@ namespace OneStepCloudAPI
             VirtualMachines = new VirtualMachinesManager(requestManager);
             Network = new NetworkManager(requestManager);
             Billing = new BillingManager(requestManager);
+            Marketplace = new MarketplaceManager(requestManager);
             Account = new AccountManager(requestManager);
             Users = new UsersManager(requestManager);
             Vpn = new VpnManager(requestManager);

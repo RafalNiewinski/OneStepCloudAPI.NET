@@ -94,7 +94,16 @@ namespace OneStepCloudAPIClient
                 //uscl.Users.DeleteUser(users.Where(x => x.id == 57).First()).Wait();
 
                 SessionSummary ss = uscl.SessionSummary().Result;
-                Console.WriteLine($"Current User Permissions ({ss.Username}):");
+
+                //ALERT
+                if (ss.InvoiceAlert != null)
+                {
+                    Console.WriteLine("ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
+                    Console.WriteLine("      INVOICE UNPAID OR OVERDUE    ");
+                    Console.WriteLine("ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
+                }
+
+                    Console.WriteLine($"Current User Permissions ({ss.Username}):");
                 foreach (var perm in ss.Permissions)
                     Console.WriteLine($"    - {perm.ToString()}");
 
@@ -185,10 +194,14 @@ namespace OneStepCloudAPIClient
 
                 Console.WriteLine("BILLING:");
                 var billingsummary = uscl.Billing.GetOverview().Result;
+                var additionalinvoiceitems = uscl.Billing.GetCurrentInvoiceItems().Result;
                 var costtimeline = uscl.Billing.GetCostTimeline().Result;
                 Console.WriteLine("    Current cost: " + billingsummary.CurrentCost);
                 Console.WriteLine("    Current balance: " + billingsummary.CurrentBalance);
                 Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToShortDateString() + " - " + billingsummary.PeriodEnd.ToShortDateString());
+                Console.WriteLine("Additional Current Invoice Items:");
+                foreach (var entry in additionalinvoiceitems)
+                    Console.WriteLine($"    - {entry.Name} - {entry.Type} - {entry.Cost}");
                 Console.WriteLine("Cost Timeline:");
                 Console.WriteLine("    Entries:");
                 foreach (var entry in costtimeline.GetEntries())
@@ -238,7 +251,7 @@ namespace OneStepCloudAPIClient
                 var invoices = uscl.Billing.GetInvoices().Result;
                 Console.WriteLine("Invoices:");
                 foreach (var invoice in invoices)
-                    Console.WriteLine($"    - {invoice.IssuedAt.ToShortDateString()} ({invoice.PeriodStart.ToShortDateString()} - {invoice.PeriodEnd.ToShortDateString()}) - {invoice.Status} - PAID: {invoice.PaidAt.ToShortDateString()} (due: {invoice.DueAt.ToShortDateString()})  => {invoice.Total}");
+                    Console.WriteLine($"    - {invoice.InvoiceNumber} - {invoice.IssuedAt.ToShortDateString()} ({invoice.PeriodStart.ToShortDateString()} - {invoice.PeriodEnd.ToShortDateString()}) - {invoice.Status} - PAID: {invoice.PaidAt.ToShortDateString()} (due: {invoice.DueAt.ToShortDateString()})  => {invoice.Total}");
 
                 Console.WriteLine("Trying to pay all unpaid invoices");
                 foreach (var invoice in invoices.Where(i => i.Status == InvoiceStatus.unpaid))
@@ -257,6 +270,25 @@ namespace OneStepCloudAPIClient
                 Console.WriteLine("VM 315 CONST TIMELINE:");
                 foreach (var entry in vmcosttimeline.GetEntries())
                     Console.WriteLine($"        - {entry.Date} - {entry.GetNumericCost()} - {entry.GetNumericComputingCost()} - {entry.GetNumericStorageCost()}");
+
+                Console.WriteLine("MARKETPLACE:");
+                var marketplaces = uscl.Marketplace.GetMarketplaceProducts().Result;
+                foreach (var mk in marketplaces)
+                {
+                    Console.WriteLine($"    - {mk.Id} - {mk.Name}:");
+                    foreach (var pr in mk.Items)
+                        Console.WriteLine($"        - {pr.Id} - {pr.Name} - {pr.Type} - {pr.PaymentType} - {pr.Price}");
+                }
+
+                Console.WriteLine("MARKETPLACE PURCHASED PRODUCTS:");
+                var marketlicenses = uscl.Marketplace.GetPurchasedLicences().Result;
+                var marketsubscriptions = uscl.Marketplace.GetPurchasedSubsctiptions().Result;
+                Console.WriteLine("    - Licences:");
+                foreach (var li in marketlicenses)
+                    Console.WriteLine($"        - {li.Id} - {li.ProductId} - {li.Name} - {li.Key} - {li.PurchasedAt} - {li.ExpiresAt} - {li.InvoiceId}");
+                Console.WriteLine("    - Subscriptions:");
+                foreach (var su in marketsubscriptions)
+                    Console.WriteLine($"        - {su.Id} - {su.ProductId} - {su.Name} - {su.Active} - {su.PurchasedAt} - {su.ExpiresAt} - {su.InvoiceId} - {su.Expired}");
 
                 var accountdetails = uscl.Account.GetAccountDetails().Result;
                 Console.WriteLine("CURRENT USER: " + accountdetails.FirstName + " " + accountdetails.LastName + " (" + accountdetails.PhoneNumber + ", " + accountdetails.MobileNumber + ")");

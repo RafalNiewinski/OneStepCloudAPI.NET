@@ -24,7 +24,9 @@ namespace OneStepCloudAPI.OneStepObjects
         public_key_create,
         public_key_delete,
         logs_view,
-        billing_manage
+        billing_manage,
+        marketplace_view,
+        marketplace_manage
     }
 
     public enum GroupStatus
@@ -47,6 +49,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public GroupStatus GroupStatus { get; set; }
         public GroupLimits GroupLimits { get; set; }
         public InfrastructureSummary InfrastructureSummary { get; set; }
+        public InvoiceStatus? InvoiceAlert { get; set; }
 
         public static implicit operator int(SessionSummary ss) { return ss.Id; }
 

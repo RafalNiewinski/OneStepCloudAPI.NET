@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\IOSCRequestManager.cs" />
     <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\BillingManager.cs" />
+    <Compile Include="Managers\MarketplaceManager.cs" />
     <Compile Include="Managers\NetworkManager.cs" />
     <Compile Include="Managers\UsersManager.cs" />
     <Compile Include="Managers\VirtualMachinesManager.cs" />
@@ -77,6 +78,9 @@
     <Compile Include="OneStepObjects\InfrastructureSummary.cs" />
     <Compile Include="OneStepObjects\Invitation.cs" />
     <Compile Include="OneStepObjects\Invoice.cs" />
+    <Compile Include="OneStepObjects\InvoiceItem.cs" />
+    <Compile Include="OneStepObjects\Licence.cs" />
+    <Compile Include="OneStepObjects\Marketplace.cs" />
     <Compile Include="OneStepObjects\NAT.cs" />
     <Compile Include="OneStepObjects\NetworkNAT.cs" />
     <Compile Include="OneStepObjects\OperatingSystem.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="OneStepObjects\ResourceLimit.cs" />
     <Compile Include="OneStepObjects\SessionSummary.cs" />
     <Compile Include="OneStepObjects\SshKey.cs" />
+    <Compile Include="OneStepObjects\Subscription.cs" />
     <Compile Include="OneStepObjects\User.cs" />
     <Compile Include="OneStepObjects\VirtualMachine.cs" />
     <Compile Include="OneStepObjects\VirtualMachineCost.cs" />
