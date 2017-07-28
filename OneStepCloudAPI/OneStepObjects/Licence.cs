@@ -13,7 +13,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public int InvoiceId { get; set; }
         public string Name { get; set; }
         public string Key { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public string ExpiresAt { get; set; }
         public DateTime PurchasedAt { get; set; }
 
         public static implicit operator int(Licence l) { return l.Id; }
