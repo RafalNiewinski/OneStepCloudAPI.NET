@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI
 {
-    public class UnderscorePropertyNamesContractResolver : DefaultContractResolver
+    class UnderscorePropertyNamesContractResolver : DefaultContractResolver
     {
         public UnderscorePropertyNamesContractResolver() : base()
         {
