@@ -12,6 +12,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string CreditCardNumber { get; set; }
         public string CreditCardType { get; set; }
         public bool IsDefault { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public static implicit operator int(CreditCard cc) { return cc.Id; }
     }

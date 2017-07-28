@@ -25,6 +25,7 @@ namespace OneStepCloudAPI.OneStepObjects
                 if (dates[1] != null) PeriodEnd = DateTime.ParseExact(dates[1], "MM-dd-yyyy", CultureInfo.InvariantCulture);
             }
         }
+        public string CurrentInvoiceCost { get; set; }
         public List<decimal> CostHistory { get; set; }
 
 

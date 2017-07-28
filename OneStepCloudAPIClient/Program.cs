@@ -197,6 +197,7 @@ namespace OneStepCloudAPIClient
                 var additionalinvoiceitems = uscl.Billing.GetCurrentInvoiceItems().Result;
                 var costtimeline = uscl.Billing.GetCostTimeline().Result;
                 Console.WriteLine("    Current cost: " + billingsummary.CurrentCost);
+                Console.WriteLine("    Current additional costs: " + billingsummary.CurrentInvoiceCost);
                 Console.WriteLine("    Current balance: " + billingsummary.CurrentBalance);
                 Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToShortDateString() + " - " + billingsummary.PeriodEnd.ToShortDateString());
                 Console.WriteLine("Additional Current Invoice Items:");
@@ -209,7 +210,7 @@ namespace OneStepCloudAPIClient
                 Console.WriteLine("Credit Cards:");
                 var ccs = uscl.Billing.GetCreditCards().Result;
                 foreach (var cc in ccs)
-                    Console.WriteLine($"    - {cc.CreditCardNumber} - {cc.CreditCardType} {(cc.IsDefault ? "*" : "")}");
+                    Console.WriteLine($"    - {cc.CreditCardNumber} - {cc.CreditCardType} - {cc.CreatedAt} {(cc.IsDefault ? "*" : "")}");
                 /*uscl.Billing.AddCreditCard(
                     new BillingInformation
                     {
