@@ -10,8 +10,6 @@ namespace OneStepCloudAPI.OneStepObjects
 {
     public class BillingOverview
     {
-        public string CurrentCost { get; set; }
-        public string CurrentBalance { get; set; }
         public string CurrentPeriod
         {
             get
@@ -25,7 +23,16 @@ namespace OneStepCloudAPI.OneStepObjects
                 if (dates[1] != null) PeriodEnd = DateTime.ParseExact(dates[1], "MM-dd-yyyy", CultureInfo.InvariantCulture);
             }
         }
-        public string CurrentInvoiceCost { get; set; }
+        public string CurrentBalance { get; set; }
+        public string CurrentCost { get; set; }
+        public string ComputingCost { get; set; }
+        public string StorageCost { get; set; }
+        public string NetworkCost { get; set; }
+        public string OtherCost { get; set; }
+        public decimal ComputingValue { get; set; }
+        public decimal StorageValue { get; set; }
+        public decimal NetworkValue { get; set; }
+        public decimal OtherValue { get; set; }
         public List<decimal> CostHistory { get; set; }
 
 

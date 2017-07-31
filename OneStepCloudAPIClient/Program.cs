@@ -197,7 +197,10 @@ namespace OneStepCloudAPIClient
                 var additionalinvoiceitems = uscl.Billing.GetCurrentInvoiceItems().Result;
                 var costtimeline = uscl.Billing.GetCostTimeline().Result;
                 Console.WriteLine("    Current cost: " + billingsummary.CurrentCost);
-                Console.WriteLine("    Current additional costs: " + billingsummary.CurrentInvoiceCost);
+                Console.WriteLine($"        Computing cost: {billingsummary.ComputingCost} ({billingsummary.ComputingValue})");
+                Console.WriteLine($"        Storage cost: {billingsummary.StorageCost} ({billingsummary.StorageValue})");
+                Console.WriteLine($"        Network cost: {billingsummary.NetworkCost} ({billingsummary.NetworkValue})");
+                Console.WriteLine($"        Current additional costs: {billingsummary.OtherCost} ({billingsummary.OtherValue})");
                 Console.WriteLine("    Current balance: " + billingsummary.CurrentBalance);
                 Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToShortDateString() + " - " + billingsummary.PeriodEnd.ToShortDateString());
                 Console.WriteLine("Additional Current Invoice Items:");
