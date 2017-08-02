@@ -19,5 +19,11 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.2" />
   </ItemGroup>
+  
+  <Target Name="ReallyClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(ProjectDir)\wwwroot" />
+    <RemoveDir Directories="$(ProjectDir)\obj" />
+    <Delete Files="$(ProjectDir)\log.txt" />
+  </Target>
 
 </Project>
