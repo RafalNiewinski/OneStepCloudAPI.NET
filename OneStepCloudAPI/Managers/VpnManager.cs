@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using OneStepCloudAPI.REST;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.Managers
@@ -17,7 +14,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task ChangePassword(string currentPassword, string newPassword)
         {
-            await rm.SendRequest("vpn/change_password", RestSharp.Method.POST, new
+            await rm.SendRequest("vpn/change_password", Method.POST, new
             {
                 current_password = currentPassword,
                 new_password = newPassword,

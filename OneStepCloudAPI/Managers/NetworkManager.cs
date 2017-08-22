@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using OneStepCloudAPI.Exceptions;
+﻿using OneStepCloudAPI.Exceptions;
 using OneStepCloudAPI.OneStepObjects;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.Managers
@@ -42,14 +41,14 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<PublicNetwork> Create()
         {
-            int id = await rm.SendRequest<OSCID>("public_networks", RestSharp.Method.POST);
+            int id = await rm.SendRequest<OSCID>("public_networks", Method.POST);
 
             return await WaitForNetState(id, NetworkResourceStatus.idle);
         }
 
         public async Task Delete(int netid)
         {
-            await rm.SendRequest($"public_networks/{netid}", RestSharp.Method.DELETE);
+            await rm.SendRequest($"public_networks/{netid}", Method.DELETE);
 
             List<PublicNetworkSummary> nets = await GetNetworks();
             var startTime = DateTime.Now;
@@ -89,7 +88,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
         {
-            int id = await rm.SendRequest<OSCID>("nats/advanced", RestSharp.Method.POST,
+            int id = await rm.SendRequest<OSCID>("nats/advanced", Method.POST,
                 new
                 {
                     virtual_machine_id = vmid,
@@ -106,7 +105,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task DeleteNat(int natid)
         {
-            await rm.SendRequest($"nats/{natid}", RestSharp.Method.DELETE, new { id = natid });
+            await rm.SendRequest($"nats/{natid}", Method.DELETE, new { id = natid });
 
             var nats = await GetNatsFlatten();
             var startTime = DateTime.Now;

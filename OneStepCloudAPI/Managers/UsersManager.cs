@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using OneStepCloudAPI.Exceptions;
-using OneStepCloudAPI.OneStepObjects;
+﻿using OneStepCloudAPI.OneStepObjects;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.Managers
@@ -37,7 +34,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<User> UpdateUserDetails(User user)
         {
-            await rm.SendRequest($"users/{user.Id}", RestSharp.Method.PATCH, new { user_detail = user.UserDetail });
+            await rm.SendRequest($"users/{user.Id}", Method.PATCH, new { user_detail = user.UserDetail });
 
             var users = await GetAll();
             return users.Where(x => x.Id == user.Id).First();
@@ -45,7 +42,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<User> UpdatePermissions(User user)
         {
-            await rm.SendRequest($"users/{user.Id}/permissions", RestSharp.Method.PUT, new { permissions = user.Permissions });
+            await rm.SendRequest($"users/{user.Id}/permissions", Method.PUT, new { permissions = user.Permissions });
 
             var users = await GetAll();
             return users.Where(x => x.Id == user.Id).First();
@@ -83,9 +80,7 @@ namespace OneStepCloudAPI.Managers
         {
             try
             {
-                var addr = new System.Net.Mail.MailAddress(address);
-
-                string res = await rm.SendRequest("user/email_available", RestSharp.Method.POST, new { email = addr.Address });
+                string res = await rm.SendRequest("user/email_available", Method.POST, new { email = address });
 
                 bool valid = Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.valid").ToObject<bool>();
                 bool available = Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.available").ToObject<bool>();
@@ -100,7 +95,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<bool> UsernameAvailable(string username)
         {
-            string res = await rm.SendRequest("user/username_available", RestSharp.Method.POST, new { username = username });
+            string res = await rm.SendRequest("user/username_available", Method.POST, new { username = username });
 
             return Newtonsoft.Json.Linq.JObject.Parse(res).SelectToken("$.valid").ToObject<bool>();
         }
@@ -112,17 +107,17 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<int> SendInvitation(string email, string username)
         {
-            return await rm.SendRequest<OSCID>("invitation", RestSharp.Method.POST, new { username = username, email = email });
+            return await rm.SendRequest<OSCID>("invitation", Method.POST, new { username = username, email = email });
         }
 
         public async Task CancelInvitation(Invitation invite)
         {
-            await rm.SendRequest($"invitation/{invite.InvitationToken}", RestSharp.Method.DELETE, new { id = invite.InvitationToken });
+            await rm.SendRequest($"invitation/{invite.InvitationToken}", Method.DELETE, new { id = invite.InvitationToken });
         }
 
         public async Task DeleteUser(int user)
         {
-            await rm.SendRequest($"users/{user}", RestSharp.Method.DELETE);
+            await rm.SendRequest($"users/{user}", Method.DELETE);
         }
     }
 }

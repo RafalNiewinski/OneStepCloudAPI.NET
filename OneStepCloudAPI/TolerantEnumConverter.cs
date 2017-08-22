@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace OneStepCloudAPI
         public override bool CanConvert(Type objectType)
         {
             Type type = IsNullableType(objectType) ? Nullable.GetUnderlyingType(objectType) : objectType;
-            return objectType.IsEnum;
+            return objectType.GetTypeInfo().IsEnum;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -66,7 +67,7 @@ namespace OneStepCloudAPI
 
         private bool IsNullableType(Type t)
         {
-            return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
+            return (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
     }
 }

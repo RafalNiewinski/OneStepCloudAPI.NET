@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using OneStepCloudAPI.OneStepObjects;
-using RestSharp;
-using Newtonsoft.Json;
 using OneStepCloudAPI.Managers;
+using OneStepCloudAPI.REST;
 
 namespace OneStepCloudAPI
 {

@@ -1,5 +1,5 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
-using RestSharp;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;

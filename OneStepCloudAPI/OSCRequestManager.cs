@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using OneStepCloudAPI.Exceptions;
 using OneStepCloudAPI.Interfaces;
 using OneStepCloudAPI.OneStepObjects;
-using RestSharp;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,8 +16,16 @@ namespace OneStepCloudAPI
 
     public class OSCRequestManager : IOSCRequestManager
     {
+        public static readonly Dictionary<OneStepRegion, string> RegionsUrls = new Dictionary<OneStepRegion, string>()
+        {
+            [OneStepRegion.UNKNOWN] = "",
+            [OneStepRegion.US] = "https://panel.onestepcloud.com/api",
+            [OneStepRegion.PL] = "https://panel.onestepcloud.pl/api"
+        };
+
         public OSCLoginObject AuthenticationData { get; set; }
         public OneStepRegion Region { get; private set; }
+        public string ApiUrl { get; private set; }
 
         readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
         {
@@ -27,32 +34,25 @@ namespace OneStepCloudAPI
             ContractResolver = new UnderscorePropertyNamesContractResolver()
         };
 
-        readonly IRestClient restClient;
+        readonly IRESTClient restClient;
+
+
 
         public OSCRequestManager(OneStepRegion region)
         {
             Region = region;
-
-            switch (Region)
-            {
-                case OneStepRegion.US:
-                    restClient = new RestClient("https://panel.onestepcloud.com/api");
-                    break;
-                case OneStepRegion.PL:
-                    restClient = new RestClient("https://panel.onestepcloud.pl/api");
-                    break;
-            }
+            ApiUrl = RegionsUrls[region];
+            restClient = new RESTClient();
         }
 
         public OSCRequestManager(string apiurl)
         {
             Region = OneStepRegion.UNKNOWN;
-
-            apiurl = apiurl.TrimEnd('/');
-            restClient = new RestClient(apiurl);
+            ApiUrl = apiurl.TrimEnd('/');
+            restClient = new RESTClient();
         }
 
-        public OSCRequestManager(IRestClient restClient)
+        public OSCRequestManager(IRESTClient restClient)
         {
             Region = OneStepRegion.UNKNOWN;
 
@@ -79,42 +79,52 @@ namespace OneStepCloudAPI
             if (authNeeded && (AuthenticationData == null || AuthenticationData.Email == null || AuthenticationData.AuthenticationToken == null || AuthenticationData.Email.Length == 0 || AuthenticationData.AuthenticationToken.Length == 0))
                 throw new NotAuthorizedException();
 
-            var req = new RestRequest(resource, method);
-            req.RequestFormat = DataFormat.Json;
+            var req = new RESTRequest()
+            {
+                Url = ApiUrl + "/" + resource,
+                Method = method,
+            };
 
             if (authNeeded)
             {
-                req.AddHeader("X-User-Email", AuthenticationData.Email);
-                req.AddHeader("X-User-Token", AuthenticationData.AuthenticationToken);
+                req.Headers.Add("X-User-Email", AuthenticationData.Email);
+                req.Headers.Add("X-User-Token", AuthenticationData.AuthenticationToken);
             }
 
             if (body.Length > 0)
-                req.AddParameter("application/json;charset=utf-8", body, ParameterType.RequestBody);
+                req.Body = new StringContent(body, Encoding.UTF8, "application/json");
 
-            IRestResponse response = await restClient.ExecuteTaskAsync(req);
-
-            //IF requested type is byte array do not check content and return binary data
-            if (typeof(T) == typeof(byte[]))
-                return (T)(object)response.RawBytes;
-
-            JToken responseContent;
-            try { responseContent = JToken.Parse(response.Content); }
-            catch(JsonException) { throw ExceptionHelper.DetermineByHttpCode(response.StatusCode, "Server response doesn't have valid JSON"); }
-
-            if (responseContent.Type == JTokenType.Object && responseContent["error"] != null)
-                throw ExceptionHelper.DetermineByHttpCode(response.StatusCode, responseContent["error"].ToString());
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw ExceptionHelper.DetermineByHttpCode(response.StatusCode);
-
-            if (typeof(T) == typeof(string) || typeof(T) == typeof(String))
+            using (RESTResponse response = (RESTResponse) await restClient.PerformRequestAsync(req))
             {
-                return (T)(object)response.Content;
-            }
-            else
-            {
-                try { return JsonConvert.DeserializeObject<T>(response.Content, jsonSettings); }
-                catch (JsonException e) { throw new ServerErrorException(response.StatusCode, e.Message, e); }
+                //IF requested type is byte array do not check content and return binary data
+                if (typeof(T) == typeof(byte[]))
+                {
+                    if (response.GetStatusCode() != HttpStatusCode.OK)
+                        throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode());
+                    return (T)(object)await response.ReadResponseAsByteArrayAsync();
+                }
+
+                string responseBody = await response.ReadResponseAsStringAsync();
+
+                JToken responseContent;
+                try { responseContent = JToken.Parse(responseBody); }
+                catch (JsonException) { throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode(), "Server response doesn't have valid JSON"); }
+
+                if (responseContent.Type == JTokenType.Object && responseContent["error"] != null)
+                    throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode(), responseContent["error"].ToString());
+
+                if (response.GetStatusCode() != HttpStatusCode.OK)
+                    throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode());
+
+                if (typeof(T) == typeof(string) || typeof(T) == typeof(String))
+                {
+                    return (T)(object)responseBody;
+                }
+                else
+                {
+                    try { return JsonConvert.DeserializeObject<T>(responseBody, jsonSettings); }
+                    catch (JsonException e) { throw new ServerErrorException(response.GetStatusCode(), e.Message, e); }
+                }
             }
         }
 

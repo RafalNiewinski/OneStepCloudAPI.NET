@@ -1,16 +1,12 @@
 ﻿using Newtonsoft.Json.Schema;
-using OneStepCloudAPI;
-using OneStepCloudAPI.Exceptions;
 using OneStepCloudAPI.OneStepObjects;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace OneStepCloudAPIClient
+namespace OneStepCloudAPI.Samples.Net452
 {
     class Program
     {
@@ -103,7 +99,7 @@ namespace OneStepCloudAPIClient
                     Console.WriteLine("ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
                 }
 
-                    Console.WriteLine($"Current User Permissions ({ss.Username}):");
+                Console.WriteLine($"Current User Permissions ({ss.Username}):");
                 foreach (var perm in ss.Permissions)
                     Console.WriteLine($"    - {perm.ToString()}");
 
@@ -325,10 +321,10 @@ namespace OneStepCloudAPIClient
 
                 Console.WriteLine("PRODUCTS:");
                 var products = uscl.VirtualMachines.GetProducts().Result;
-                foreach(var p in products)
+                foreach (var p in products)
                 {
                     Console.WriteLine($"    - {p.Id} - {p.Name}");
-                    foreach(var t in p.Products)
+                    foreach (var t in p.Products)
                     {
                         Console.WriteLine($"        - {t.Id} - {t.Name} - CPU({t.MinimumCpu}-{t.MaximumCpu}) - MEM({t.MinimumMemoryMb}-{t.MaximumMemoryMb}) - STORAGE({t.MaximumAdditionalDisks}*{t.MinimumStorageGb}-{t.MaximumStorageGb})");
                         Console.WriteLine($"            OS => {t.OperatingSystem.Id} - {t.OperatingSystem.Name} - {t.OperatingSystem.SystemType} - DISK: {t.OperatingSystem.StorageGb}");

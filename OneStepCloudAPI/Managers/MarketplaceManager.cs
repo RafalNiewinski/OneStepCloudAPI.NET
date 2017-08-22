@@ -1,4 +1,5 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<int> PurchaseLicence(int id)
         {
-            return await rm.SendRequest<OSCID>($"licences/{id}", RestSharp.Method.PATCH);
+            return await rm.SendRequest<OSCID>($"licences/{id}", Method.PATCH);
         }
 
         public Task<List<Subscription>> GetPurchasedSubsctiptions()
@@ -38,12 +39,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<int> PurchaseSubscription(int id)
         {
-            return await rm.SendRequest<OSCID>($"subscriptions/{id}", RestSharp.Method.PATCH);
+            return await rm.SendRequest<OSCID>($"subscriptions/{id}", Method.PATCH);
         }
 
         public async Task CancelSubscription(int id)
         {
-            await rm.SendRequest($"subscriptions/{id}", RestSharp.Method.DELETE);
+            await rm.SendRequest($"subscriptions/{id}", Method.DELETE);
         }
     }
 }

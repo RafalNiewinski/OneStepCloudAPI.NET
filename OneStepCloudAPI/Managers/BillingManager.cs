@@ -1,4 +1,5 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,17 +39,17 @@ namespace OneStepCloudAPI.Managers
 
         public async Task AddCreditCard(BillingInformation billdata, CreditCardDetail cc)
         {
-            await rm.SendRequest("credit_cards", RestSharp.Method.POST, new { billing_information = billdata, credit_card_detail = cc });
+            await rm.SendRequest("credit_cards", Method.POST, new { billing_information = billdata, credit_card_detail = cc });
         }
 
         public async Task MakeCreditCardDefault(int ccid)
         {
-            await rm.SendRequest($"credit_cards/{ccid}", RestSharp.Method.PATCH, new { id = ccid });
+            await rm.SendRequest($"credit_cards/{ccid}", Method.PATCH, new { id = ccid });
         }
 
         public async Task DeleteCreditCard(int ccid)
         {
-            await rm.SendRequest($"credit_cards/{ccid}", RestSharp.Method.DELETE, new { id = ccid });
+            await rm.SendRequest($"credit_cards/{ccid}", Method.DELETE, new { id = ccid });
         }
 
         public Task<List<PromoCode>> GetPromoCodes()
@@ -58,7 +59,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task ApplyPromoCode(string code)
         {
-            await rm.SendRequest("promocode", RestSharp.Method.POST, new { code = code });
+            await rm.SendRequest("promocode", Method.POST, new { code = code });
         }
 
         public Task<List<Payment>> GetPaymentHistory()
@@ -78,7 +79,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task PayInvoice(int id)
         {
-            await rm.SendRequest($"invoices/{id}", RestSharp.Method.PATCH, new { id = id });
+            await rm.SendRequest($"invoices/{id}", Method.PATCH, new { id = id });
         }
 
         public Task<List<VirtualMachineCost>> GetVirtualMachinesCosts()

@@ -1,4 +1,5 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
+using OneStepCloudAPI.REST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task UpdateAccountDetails(UserDetail details)
         {
-            await rm.SendRequest("user/profile", RestSharp.Method.PATCH, new { user_detail = details });
+            await rm.SendRequest("user/profile", Method.PATCH, new { user_detail = details });
         }
 
         public async Task ChangePassword(string oldpassword, string newpassword)
         {
-            await rm.SendRequest("user/change_password", RestSharp.Method.POST, new { current_password = oldpassword, password = newpassword, password_confirmation = newpassword });
+            await rm.SendRequest("user/change_password", Method.POST, new { current_password = oldpassword, password = newpassword, password_confirmation = newpassword });
         }
 
         public Task<List<SshKey>> GetSshKeys()
@@ -38,12 +39,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<int> AddSshKey(string name, string key)
         {
-            return await rm.SendRequest<OSCID>("user/keys", RestSharp.Method.POST, new { name = name, key = key });
+            return await rm.SendRequest<OSCID>("user/keys", Method.POST, new { name = name, key = key });
         }
 
         public async Task DeleteSshKey(int keyid)
         {
-            await rm.SendRequest($"user/keys/{keyid}", RestSharp.Method.DELETE, new { id = keyid });
+            await rm.SendRequest($"user/keys/{keyid}", Method.DELETE, new { id = keyid });
         }
 
         #region GROUP DELETE
@@ -54,12 +55,12 @@ namespace OneStepCloudAPI.Managers
 
         public async Task GenerateEndingInvoice()
         {
-            await rm.SendRequest("group/ending_invoice", RestSharp.Method.POST);
+            await rm.SendRequest("group/ending_invoice", Method.POST);
         }
 
         public async Task DeleteGroupPermanently()
         {
-            await rm.SendRequest("group/goodbye", RestSharp.Method.POST);
+            await rm.SendRequest("group/goodbye", Method.POST);
         }
         #endregion
     }

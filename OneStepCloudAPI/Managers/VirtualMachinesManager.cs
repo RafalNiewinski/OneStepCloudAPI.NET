@@ -2,16 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net;
-using Newtonsoft.Json;
 using OneStepCloudAPI.Exceptions;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Linq;
+using OneStepCloudAPI.REST;
 
 namespace OneStepCloudAPI.Managers
 {
@@ -57,7 +52,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<int> Create(VirtualMachinePrototype proto)
         {
-            return await rm.SendRequest<OSCID>("virtual_machines", RestSharp.Method.POST, proto);
+            return await rm.SendRequest<OSCID>("virtual_machines", Method.POST, proto);
         }
 
         public async Task<JSchema> GetConfigurationSchema(int id)
@@ -76,7 +71,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> Configure(int id, dynamic proto)
         {
-            await rm.SendRequest($"virtual_machines/{id}/configure", RestSharp.Method.POST, new { configuration_options = proto });
+            await rm.SendRequest($"virtual_machines/{id}/configure", Method.POST, new { configuration_options = proto });
 
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
@@ -95,13 +90,13 @@ namespace OneStepCloudAPI.Managers
                 disk_remove_requirements_performed = true
             };
 
-            await rm.SendRequest($"virtual_machines/{vm.Id}", RestSharp.Method.PATCH, editvars);
+            await rm.SendRequest($"virtual_machines/{vm.Id}", Method.PATCH, editvars);
             return await WaitForState(vm.Id, VirtualMachineStatus.idle);
         }
 
         public async Task Delete(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}", RestSharp.Method.DELETE, new { id });
+            await rm.SendRequest($"virtual_machines/{id}", Method.DELETE, new { id });
 
             List<VirtualMachineSummary> vms = await GetAll();
             var startTime = DateTime.Now;
@@ -119,37 +114,37 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> PowerOn(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}/power_on", RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/power_on", Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> Suspend(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}/suspend", RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/suspend", Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> PowerOff(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}/shutdown", RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/shutdown", Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> Reboot(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}/reboot", RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/reboot", Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> SnapshotCreate(int id)
         {
-            await rm.SendRequest($"virtual_machines/{id}/snapshots", RestSharp.Method.POST, new { id = id });
+            await rm.SendRequest($"virtual_machines/{id}/snapshots", Method.POST, new { id = id });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
         public async Task<VirtualMachine> SnapshotRevert(int vmid, int snapid)
         {
-            await rm.SendRequest($"virtual_machines/{vmid}/snapshots/{snapid}", RestSharp.Method.PATCH, new { id = snapid });
+            await rm.SendRequest($"virtual_machines/{vmid}/snapshots/{snapid}", Method.PATCH, new { id = snapid });
             return await WaitForState(vmid, VirtualMachineStatus.idle);
         }
 
@@ -160,7 +155,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> SnapshotDelete(int id, int snapid)
         {
-            await rm.SendRequest($"virtual_machines/{id}/snapshots/{snapid}", RestSharp.Method.DELETE, new { id = snapid });
+            await rm.SendRequest($"virtual_machines/{id}/snapshots/{snapid}", Method.DELETE, new { id = snapid });
             return await WaitForState(id, VirtualMachineStatus.idle);
         }
 
@@ -171,7 +166,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<VirtualMachine> Rename(int vmid, string name)
         {
-            await rm.SendRequest($"virtual_machines/{vmid}/rename", RestSharp.Method.POST, new { name_tag = name });
+            await rm.SendRequest($"virtual_machines/{vmid}/rename", Method.POST, new { name_tag = name });
             return await Get(vmid);
         }
 
@@ -186,7 +181,7 @@ namespace OneStepCloudAPI.Managers
 
         public async Task<List<VirtualMachinePermission>> SetPermissionsForUser(int vm, int user, List<VirtualMachinePermission> perms)
         {
-            await rm.SendRequest($"virtual_machines/{vm}/permissions/{user}", RestSharp.Method.PATCH, new { permissions = perms });
+            await rm.SendRequest($"virtual_machines/{vm}/permissions/{user}", Method.PATCH, new { permissions = perms });
 
             return await GetPermissionsForUser(vm, user);
         }
