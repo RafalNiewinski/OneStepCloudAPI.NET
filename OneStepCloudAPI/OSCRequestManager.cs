@@ -85,6 +85,7 @@ namespace OneStepCloudAPI
                 Method = method,
             };
 
+            req.Headers.Add("X-User-Language", "en-US");
             if (authNeeded)
             {
                 req.Headers.Add("X-User-Email", AuthenticationData.Email);
