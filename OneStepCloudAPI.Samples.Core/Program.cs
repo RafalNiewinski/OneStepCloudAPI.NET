@@ -196,7 +196,7 @@ namespace OneStepCloudAPI.Samples.Core
                 Console.WriteLine($"        Network cost: {billingsummary.NetworkCost} ({billingsummary.NetworkValue})");
                 Console.WriteLine($"        Current additional costs: {billingsummary.OtherCost} ({billingsummary.OtherValue})");
                 Console.WriteLine("    Current balance: " + billingsummary.CurrentBalance);
-                Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToString("d") + " - " + billingsummary.PeriodEnd.ToString("d"));
+                Console.WriteLine("    Current period: " + billingsummary.PeriodStart.ToShortDateString() + " - " + billingsummary.PeriodEnd.ToShortDateString());
                 Console.WriteLine("Additional Current Invoice Items:");
                 foreach (var entry in additionalinvoiceitems)
                     Console.WriteLine($"    - {entry.Name} - {entry.Type} - {entry.Cost}");
@@ -243,13 +243,13 @@ namespace OneStepCloudAPI.Samples.Core
                 var payments = uscl.Billing.GetPaymentHistory().Result;
                 Console.WriteLine("Payments:");
                 foreach (var payment in payments)
-                    Console.WriteLine("    - " + payment.CreatedAt.ToString("d") + " - " + (payment.PaymentMethod != null ? payment.PaymentMethod.DisplayName : "") + " - " + payment.Amount + " - " + payment.Status);
+                    Console.WriteLine("    - " + payment.CreatedAt.ToShortDateString() + " - " + (payment.PaymentMethod != null ? payment.PaymentMethod.DisplayName : "") + " - " + payment.Amount + " - " + payment.Status);
 
 
                 var invoices = uscl.Billing.GetInvoices().Result;
                 Console.WriteLine("Invoices:");
                 foreach (var invoice in invoices)
-                    Console.WriteLine($"    - {invoice.InvoiceNumber} - {invoice.IssuedAt.ToString("d")} ({invoice.PeriodStart.ToString("d")} - {invoice.PeriodEnd.ToString("d")}) - {invoice.Status} - PAID: {invoice.PaidAt.ToString("d")} (due: {invoice.DueAt.ToString("d")})  => {invoice.Total}");
+                    Console.WriteLine($"    - {invoice.InvoiceNumber} - {invoice.IssuedAt.ToShortDateString()} ({invoice.PeriodStart.ToShortDateString()} - {invoice.PeriodEnd.ToShortDateString()}) - {invoice.Status} - PAID: {invoice.PaidAt.ToShortDateString()} (due: {invoice.DueAt.ToShortDateString()})  => {invoice.Total}");
 
                 Console.WriteLine("Trying to pay all unpaid invoices");
                 foreach (var invoice in invoices.Where(i => i.Status == InvoiceStatus.unpaid))
