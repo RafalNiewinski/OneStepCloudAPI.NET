@@ -45,6 +45,8 @@ namespace OneStepCloudAPI.OneStepObjects
         public int Id { get; set; }
         public string Username { get; set; }
         public List<UserPermission> Permissions { get; set; }
+        public string Language { get; set; }
+        public bool Primary { get; set; }
         public bool NetworkBusy { get; set; }
         public GroupStatus GroupStatus { get; set; }
         public GroupLimits GroupLimits { get; set; }
