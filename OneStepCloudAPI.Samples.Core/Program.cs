@@ -109,7 +109,11 @@ namespace OneStepCloudAPI.Samples.Core
                 Console.WriteLine("Virtual Machines:");
                 var vms = uscl.VirtualMachines.GetAllDetailed().Result;
                 foreach (var vm in vms)
+                {
                     Console.WriteLine($"    - {vm.Id} - {vm.NameTag} - {vm.CreatedAt} - {vm.Username} - CPU: {vm.Cpu} - MEM: {vm.MemoryMb} - STORAGE: {vm.StorageGb} - {vm.PrivateNetworks.First().IpAddress}");
+                    if (!string.IsNullOrEmpty(vm.Description))
+                        Console.WriteLine($"        {vm.Description}");
+                }
 
                 PrintNetworks(uscl);
 

@@ -170,6 +170,12 @@ namespace OneStepCloudAPI.Managers
             return await Get(vmid);
         }
 
+        public async Task<VirtualMachine> UpdateDescription(int vmid, string description)
+        {
+            await rm.SendRequest($"virtual_machines/{vmid}/description", Method.PATCH, new { description = description });
+            return await Get(vmid);
+        }
+
 
         #region Permissions Management
 
