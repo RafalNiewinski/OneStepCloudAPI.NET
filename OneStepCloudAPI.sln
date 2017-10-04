@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneStepCloudAPI", "OneStepCloudAPI\OneStepCloudAPI.csproj", "{9362ED9A-B883-4DD7-BF31-DDFDC449D9C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneStepCloudAPI.Docs", "OneStepCloudAPI.Docs\OneStepCloudAPI.Docs.csproj", "{154FDD1A-03A9-4BC9-A922-27F29923E596}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0BC5AFFB-527D-43F0-8556-439D7986743D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneStepCloudAPI.Samples.Core", "OneStepCloudAPI.Samples.Core\OneStepCloudAPI.Samples.Core.csproj", "{3F864E24-15EF-4168-A70C-3A69B1F0BCE3}"
@@ -25,10 +23,6 @@ Global
 		{9362ED9A-B883-4DD7-BF31-DDFDC449D9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9362ED9A-B883-4DD7-BF31-DDFDC449D9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9362ED9A-B883-4DD7-BF31-DDFDC449D9C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{154FDD1A-03A9-4BC9-A922-27F29923E596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{154FDD1A-03A9-4BC9-A922-27F29923E596}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{154FDD1A-03A9-4BC9-A922-27F29923E596}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{154FDD1A-03A9-4BC9-A922-27F29923E596}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F864E24-15EF-4168-A70C-3A69B1F0BCE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F864E24-15EF-4168-A70C-3A69B1F0BCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F864E24-15EF-4168-A70C-3A69B1F0BCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
