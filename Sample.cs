@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema;
 using OneStepCloudAPI.OneStepObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OneStepCloudAPI.Samples.Net461
+namespace OneStepCloudAPI.Samples.Code
 {
     class Program
     {
@@ -218,8 +216,8 @@ namespace OneStepCloudAPI.Samples.Net461
                     new BillingInformation
                     {
                         address = "beberebe",
-                        city = "Wrocław",
-                        company_name = "Świerszczyk",
+                        city = "Wroc�aw",
+                        company_name = "�wierszczyk",
                         country = "Albania",
                         first_name = "Zbychu",
                         last_name = "Zadychu",
@@ -382,7 +380,6 @@ namespace OneStepCloudAPI.Samples.Net461
             Console.WriteLine("END END END");
             Console.ReadKey();
         }
-
 
         static void PrintNetworks(OneStepClient uscl)
         {
