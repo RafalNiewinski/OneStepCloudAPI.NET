@@ -10,6 +10,7 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         public bool PublicNetworks { get; set; }
         public bool VirtualMachines { get; set; }
+        public bool DedicatedMachines { get; set; }
         public bool Nats { get; set; }
         public bool InvoicesPaid { get; set; }
         public bool EndingInvoiceIssued { get; set; }
