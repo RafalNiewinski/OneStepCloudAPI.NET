@@ -39,11 +39,14 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<PublicNetwork>($"public_networks/{netid}");
         }
 
-        public async Task<PublicNetwork> Create()
+        public async Task<PublicNetwork> Create(bool wait = true)
         {
             int id = await rm.SendRequest<OSCID>("public_networks", Method.POST);
 
-            return await WaitForNetState(id, NetworkResourceStatus.idle);
+            if (wait)
+                return await WaitForNetState(id, NetworkResourceStatus.idle);
+            else
+                return await GetNetwork(id);
         }
 
         public async Task Delete(int netid)
@@ -86,7 +89,7 @@ namespace OneStepCloudAPI.Managers
             return (await GetNats()).Values.SelectMany(x => x).ToList();
         }
 
-        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto)
+        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto, bool wait = true)
         {
             int id = await rm.SendRequest<OSCID>("nats/advanced", Method.POST,
                 new
@@ -100,7 +103,10 @@ namespace OneStepCloudAPI.Managers
                 }
             );
 
-            return await WaitForNatState(id, publicnetworkid, NetworkResourceStatus.idle);
+            if(wait)
+                return await WaitForNatState(id, publicnetworkid, NetworkResourceStatus.idle);
+            else
+                return (await GetNetwork(publicnetworkid)).Nats.Where(n => n.Id == id).First();
         }
 
         public async Task DeleteNat(int natid)
@@ -122,9 +128,9 @@ namespace OneStepCloudAPI.Managers
         }
         #endregion
 
-        #region Private Utils
+        #region Utils
 
-        private async Task<PublicNetwork> WaitForNetState(int netid, NetworkResourceStatus state)
+        public async Task<PublicNetwork> WaitForNetState(int netid, NetworkResourceStatus state)
         {
             PublicNetwork net;
 
@@ -146,7 +152,7 @@ namespace OneStepCloudAPI.Managers
             throw new TimeoutException();
         }
 
-        private async Task<NetworkNAT> WaitForNatState(int natid, int netid, NetworkResourceStatus state)
+        public async Task<NetworkNAT> WaitForNatState(int natid, int netid, NetworkResourceStatus state)
         {
             NetworkNAT nat;
 

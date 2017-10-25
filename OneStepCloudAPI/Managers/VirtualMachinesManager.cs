@@ -69,14 +69,17 @@ namespace OneStepCloudAPI.Managers
             catch { throw new ServerErrorException(0, "Invalid Server Reply"); }
         }
 
-        public async Task<VirtualMachine> Configure(int id, dynamic proto)
+        public async Task<VirtualMachine> Configure(int id, dynamic proto, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/configure", Method.POST, new { configuration_options = proto });
 
-            return await WaitForState(id, VirtualMachineStatus.idle);
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> Edit(VirtualMachine vm)
+        public async Task<VirtualMachine> Edit(VirtualMachine vm, bool wait = true)
         {
             List<object> disks = new List<object>();
             vm.VirtualMachineDisks.Where(d => d.Id != 0).ToList().ForEach(x => disks.Add(x));
@@ -91,7 +94,11 @@ namespace OneStepCloudAPI.Managers
             };
 
             await rm.SendRequest($"virtual_machines/{vm.Id}", Method.PATCH, editvars);
-            return await WaitForState(vm.Id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(vm.Id, VirtualMachineStatus.idle);
+            else
+                return await Get(vm.Id);
         }
 
         public async Task Delete(int id)
@@ -112,40 +119,64 @@ namespace OneStepCloudAPI.Managers
             throw new TimeoutException();
         }
 
-        public async Task<VirtualMachine> PowerOn(int id)
+        public async Task<VirtualMachine> PowerOn(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/power_on", Method.POST, new { id = id });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> Suspend(int id)
+        public async Task<VirtualMachine> Suspend(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/suspend", Method.POST, new { id = id });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> PowerOff(int id)
+        public async Task<VirtualMachine> PowerOff(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/shutdown", Method.POST, new { id = id });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> Reboot(int id)
+        public async Task<VirtualMachine> Reboot(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/reboot", Method.POST, new { id = id });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> SnapshotCreate(int id)
+        public async Task<VirtualMachine> SnapshotCreate(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/snapshots", Method.POST, new { id = id });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
-        public async Task<VirtualMachine> SnapshotRevert(int vmid, int snapid)
+        public async Task<VirtualMachine> SnapshotRevert(int id, int snapid, bool wait = true)
         {
-            await rm.SendRequest($"virtual_machines/{vmid}/snapshots/{snapid}", Method.PATCH, new { id = snapid });
-            return await WaitForState(vmid, VirtualMachineStatus.idle);
+            await rm.SendRequest($"virtual_machines/{id}/snapshots/{snapid}", Method.PATCH, new { id = snapid });
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
         public Task<VirtualMachine> SnapshotRevert(VirtualMachine vm)
@@ -153,10 +184,14 @@ namespace OneStepCloudAPI.Managers
             return SnapshotRevert(vm.Id, vm.VirtualMachineSnapshots.First().Id);
         }
 
-        public async Task<VirtualMachine> SnapshotDelete(int id, int snapid)
+        public async Task<VirtualMachine> SnapshotDelete(int id, int snapid, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/snapshots/{snapid}", Method.DELETE, new { id = snapid });
-            return await WaitForState(id, VirtualMachineStatus.idle);
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
         }
 
         public Task<VirtualMachine> SnapshotDelete(VirtualMachine vm)
@@ -216,9 +251,9 @@ namespace OneStepCloudAPI.Managers
 
         #endregion
 
-        #region Private Utils
+        #region Utils
 
-        private async Task<VirtualMachine> WaitForState(int vmid, VirtualMachineStatus state)
+        public async Task<VirtualMachine> WaitForState(int vmid, VirtualMachineStatus state)
         {
             VirtualMachine vm;
 
