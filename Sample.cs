@@ -72,7 +72,7 @@ namespace OneStepCloudAPI.Samples.Code
             try
             {
                 OneStepClient uscl = new OneStepClient(OneStepRegion.PL);
-                uscl.SignIn("rafalniewinski", "***REMOVED***").Wait();
+                uscl.PasswordSignIn("rafalniewinski", "***REMOVED***").Wait();
 
                 List<User> users = uscl.Users.GetAll().Result;
                 User seconduser = users.Where(x => x.Username == "seconduser").First();
@@ -334,7 +334,7 @@ namespace OneStepCloudAPI.Samples.Code
                 }
 
 
-                Console.WriteLine("CONFIGURATION SCHEMA (HAPROXY):");
+                /*Console.WriteLine("CONFIGURATION SCHEMA (HAPROXY):");
                 var dokonfigu = uscl.VirtualMachines.Get(928).Result;
                 var config = uscl.VirtualMachines.GetConfigurationSchema(dokonfigu).Result;
                 foreach (var prop in config.Properties)
@@ -349,7 +349,7 @@ namespace OneStepCloudAPI.Samples.Code
                                 Console.WriteLine("            - " + iprop.Key + " - " + iprop.Value.Type + (iprop.Value.Pattern != null ? $" ({iprop.Value.Pattern})" : ""));
                         }
                     }
-                }
+                }*/
 
                 //PrepareLBTestClients();
             }

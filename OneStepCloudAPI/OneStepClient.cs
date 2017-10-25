@@ -19,7 +19,6 @@ namespace OneStepCloudAPI
         public static int PoolingInterval = 5000; //5 Sec
         public static int TaskTimeout = 600000; //10 Min
 
-        public bool Authorized { get; private set; }
         public VirtualMachinesManager VirtualMachines { get; private set; }
         public NetworkManager Network { get; private set; }
         public BillingManager Billing { get; private set; }
@@ -60,15 +59,21 @@ namespace OneStepCloudAPI
         public async Task<SessionSummary> SessionSummary() { return await requestManager.GetSessionSummary(); }
         public async Task<string> MainenanceMessage() { return await requestManager.GetMaintenanceMessage(); }
 
-        public async Task SignIn(string username, string password)
+        public async Task PasswordSignIn(string username, string password)
         {
             if (username.Length == 0 || password.Length == 0)
                 throw new InvalidOperationException("Username or password empty");
 
             requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>("user/login", Method.POST, new { Username = username, Password = password }, false);
+        }
 
-            if (requestManager.AuthenticationData != null && requestManager.AuthenticationData.Email != null && requestManager.AuthenticationData.AuthenticationToken != null)
-                Authorized = true;
+        public async Task TokenSignIn(string email, string token)
+        {
+            if (email.Length == 0 || token.Length == 0)
+                throw new InvalidOperationException("Email or token empty");
+
+            requestManager.AuthenticationData = new OSCLoginObject { Email = email, AuthenticationToken = token };
+            requestManager.AuthenticationData.Primary = (await SessionSummary()).Primary;
         }
 
         public async Task Register(string email, string username, string password)
@@ -86,9 +91,6 @@ namespace OneStepCloudAPI
                     Password = password
                 }
             }, false);
-
-            if (requestManager.AuthenticationData != null && requestManager.AuthenticationData.Email != null && requestManager.AuthenticationData.AuthenticationToken != null)
-                Authorized = true;
         }
 
         public async Task ConfirmAccount(string code)
