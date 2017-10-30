@@ -9,9 +9,9 @@ namespace OneStepCloudAPI.Managers
 {
     public class UsersManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public UsersManager(OSCRequestManager rm)
+        public UsersManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

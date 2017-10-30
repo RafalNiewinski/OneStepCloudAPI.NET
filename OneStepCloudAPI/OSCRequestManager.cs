@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OneStepCloudAPI.Exceptions;
-using OneStepCloudAPI.Interfaces;
 using OneStepCloudAPI.OneStepObjects;
 using OneStepCloudAPI.REST;
 using System;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 namespace OneStepCloudAPI
 {
 
-    public class OSCRequestManager : IOSCRequestManager
+    class OSCRequestManager : IOSCRequestManager
     {
         public static readonly Dictionary<OneStepRegion, string> RegionsUrls = new Dictionary<OneStepRegion, string>()
         {

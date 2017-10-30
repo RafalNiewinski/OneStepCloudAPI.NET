@@ -1,18 +1,15 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
 using OneStepCloudAPI.REST;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.Managers
 {
     public class BillingManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public BillingManager(OSCRequestManager rm)
+        public BillingManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

@@ -10,9 +10,9 @@ namespace OneStepCloudAPI.Managers
 {
     public class NetworkManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public NetworkManager(OSCRequestManager rm)
+        public NetworkManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

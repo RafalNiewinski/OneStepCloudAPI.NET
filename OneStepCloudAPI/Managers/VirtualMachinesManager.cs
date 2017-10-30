@@ -12,9 +12,9 @@ namespace OneStepCloudAPI.Managers
 {
     public class VirtualMachinesManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public VirtualMachinesManager(OSCRequestManager rm)
+        public VirtualMachinesManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

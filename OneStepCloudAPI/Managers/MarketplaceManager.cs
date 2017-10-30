@@ -1,18 +1,15 @@
 ﻿using OneStepCloudAPI.OneStepObjects;
 using OneStepCloudAPI.REST;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.Managers
 {
     public class MarketplaceManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public MarketplaceManager(OSCRequestManager rm)
+        public MarketplaceManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

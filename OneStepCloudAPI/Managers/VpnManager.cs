@@ -5,9 +5,9 @@ namespace OneStepCloudAPI.Managers
 {
     public class VpnManager
     {
-        readonly OSCRequestManager rm;
+        readonly IOSCRequestManager rm;
 
-        public VpnManager(OSCRequestManager rm)
+        public VpnManager(IOSCRequestManager rm)
         {
             this.rm = rm;
         }

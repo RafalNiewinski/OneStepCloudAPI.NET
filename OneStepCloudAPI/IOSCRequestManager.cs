@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneStepCloudAPI.Interfaces
+namespace OneStepCloudAPI
 {
-    interface IOSCRequestManager
+    public interface IOSCRequestManager
     {
         Task<string> SendRequest(string resource, Method method, object body, bool authNeeded = true);
         Task<T> SendRequest<T>(string resource, Method method, object body, bool authNeeded = true);
