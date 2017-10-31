@@ -22,9 +22,11 @@ namespace OneStepCloudAPI
             [OneStepRegion.PL] = "https://panel.onestepcloud.pl/api"
         };
 
+        public string ApiUrl { get; set; }
         public OSCLoginObject AuthenticationData { get; set; }
-        public OneStepRegion Region { get; private set; }
-        public string ApiUrl { get; private set; }
+
+        public OneStepRegion GetRegion() => region;
+        readonly OneStepRegion region;
 
         readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
         {
@@ -35,25 +37,23 @@ namespace OneStepCloudAPI
 
         readonly IRESTClient restClient;
 
-
-
         public OSCRequestManager(OneStepRegion region)
         {
-            Region = region;
+            this.region = region;
             ApiUrl = RegionsUrls[region];
             restClient = new RESTClient();
         }
 
         public OSCRequestManager(string apiurl)
         {
-            Region = OneStepRegion.UNKNOWN;
+            region = OneStepRegion.UNKNOWN;
             ApiUrl = apiurl.TrimEnd('/');
             restClient = new RESTClient();
         }
 
         public OSCRequestManager(IRESTClient restClient)
         {
-            Region = OneStepRegion.UNKNOWN;
+            region = OneStepRegion.UNKNOWN;
 
             this.restClient = restClient;
         }

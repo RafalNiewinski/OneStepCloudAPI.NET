@@ -10,6 +10,9 @@ namespace OneStepCloudAPI
 {
     public interface IOSCRequestManager
     {
+        OSCLoginObject AuthenticationData { get; set; }
+
+        OneStepRegion GetRegion();
         Task<string> SendRequest(string resource, Method method, object body, bool authNeeded = true);
         Task<T> SendRequest<T>(string resource, Method method, object body, bool authNeeded = true);
         Task<string> SendRequest(string resource, Method method = Method.GET, string body = "", bool authNeeded = true);

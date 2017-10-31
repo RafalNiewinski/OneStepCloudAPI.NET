@@ -28,7 +28,7 @@ namespace OneStepCloudAPI
         public VpnManager Vpn { get; private set; }
 
 
-        OSCRequestManager requestManager;
+        IOSCRequestManager requestManager;
 
 
         public OneStepClient(OneStepRegion region)
@@ -60,7 +60,7 @@ namespace OneStepCloudAPI
             Vpn = new VpnManager(requestManager);
         }
 
-        public OneStepRegion Region() { return requestManager.Region; }
+        public OneStepRegion Region() { return requestManager.GetRegion(); }
         public OSCLoginObject AuthData() { return requestManager.AuthenticationData; }
         public async Task<SessionSummary> SessionSummary() { return await requestManager.GetSessionSummary(); }
         public async Task<string> MainenanceMessage() { return await requestManager.GetMaintenanceMessage(); }
