@@ -43,6 +43,12 @@ namespace OneStepCloudAPI
             Initialize();
         }
 
+        public OneStepClient(IOSCRequestManager rq)
+        {
+            requestManager = rq;
+            Initialize();
+        }
+
         private void Initialize()
         {
             VirtualMachines = new VirtualMachinesManager(requestManager);
