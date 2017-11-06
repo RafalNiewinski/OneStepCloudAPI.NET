@@ -29,10 +29,12 @@ namespace OneStepCloudAPI.OneStepObjects
         public string StorageCost { get; set; }
         public string NetworkCost { get; set; }
         public string OtherCost { get; set; }
+        public string DedicatedCost { get; set; }
         public decimal ComputingValue { get; set; }
         public decimal StorageValue { get; set; }
         public decimal NetworkValue { get; set; }
         public decimal OtherValue { get; set; }
+        public decimal DedicatedValue { get; set; }
         public List<decimal> CostHistory { get; set; }
 
 
