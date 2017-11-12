@@ -108,7 +108,12 @@ namespace OneStepCloudAPI
 
                 JToken responseContent;
                 try { responseContent = JToken.Parse(responseBody); }
-                catch (JsonException) { throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode(), "Server response doesn't have valid JSON"); }
+                catch (JsonException)
+                {
+                    if(response.GetStatusCode() != HttpStatusCode.OK)
+                        throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode());
+                    throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode(), "Server response doesn't have valid JSON");
+                }
 
                 if (responseContent.Type == JTokenType.Object && responseContent["error"] != null)
                     throw ExceptionHelper.DetermineByHttpCode(response.GetStatusCode(), responseContent["error"].ToString());

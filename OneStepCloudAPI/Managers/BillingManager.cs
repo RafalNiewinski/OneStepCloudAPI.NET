@@ -24,9 +24,9 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<List<InvoiceItem>>("billing/current_invoice");
         }
 
-        public async Task<BillingTimeline> GetCostTimeline()
+        public Task<BillingTimelineOverview> GetCostTimeline()
         {
-            return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>("billing/cost_timeline"));
+            return rm.SendRequest<BillingTimelineOverview>("billing/cost_timeline");
         }
 
         public Task<List<CreditCard>> GetCreditCards()
@@ -84,9 +84,9 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<List<VirtualMachineCost>>("billing/detailed_summary");
         }
 
-        public async Task<BillingTimeline> GetVirtualMachineCostTimeline(int vmid)
+        public Task<BillingTimelineVM> GetVirtualMachineCostTimeline(int vmid)
         {
-            return new BillingTimeline(await rm.SendRequest<List<BillingTimelineEntry>>($"billing/cost_timeline/{vmid}"));
+            return rm.SendRequest<BillingTimelineVM>($"billing/cost_timeline/{vmid}");
         }
     }
 }

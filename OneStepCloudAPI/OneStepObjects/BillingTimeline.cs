@@ -7,57 +7,61 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
-    public class BillingTimelineEntry
+    public abstract class BillingTimeline
     {
-        public DateTime Date { get; set; }
-        public string Cost { get; set; }
-        public string ComputingCost { get; set; }
-        public string StorageCost { get; set; }
+        public List<int> Timestamps { get; set; }
 
-        public decimal GetNumericCost()
+        public (DateTime TimelineStart, DateTime TimelineEnd) TimelinePeriod()
         {
-            return decimal.Parse(Cost, NumberStyles.Currency, CultureInfo.InvariantCulture);
+            var times = Timestamps.OrderBy(x => x);
+            return (DateTimeFromUnixTimestamp(times.First()), DateTimeFromUnixTimestamp(times.Last()));
         }
 
-        public decimal GetNumericComputingCost()
-        {
-            return decimal.Parse(ComputingCost, NumberStyles.Currency, CultureInfo.InvariantCulture);
-        }
+        protected DateTime DateTimeFromUnixTimestamp(int timestamp) => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(timestamp);
+    }
 
-        public decimal GetNumericStorageCost()
+    public class BillingTimelineOverview : BillingTimeline
+    {
+        public List<decimal> Values { get; set; }
+
+        public List<(DateTime Time, decimal Value)> Entries
         {
-            return decimal.Parse(StorageCost, NumberStyles.Currency, CultureInfo.InvariantCulture);
+            get
+            {
+                if (Timestamps.Count != Values.Count)
+                    throw new InvalidOperationException("Timestamps and values count in timeline are not equal.");
+
+                var entries = new List<(DateTime, decimal)>();
+                for (int i = 0; i < Timestamps.Count; i++)
+                {
+                    entries.Add((DateTimeFromUnixTimestamp(Timestamps[i]), Values[i]));
+                }
+
+                return entries;
+            }
         }
     }
 
-    public class BillingTimeline
+    public class BillingTimelineVM : BillingTimeline
     {
-        readonly List<BillingTimelineEntry> Entries;
+        public List<decimal> Computing { get; set; }
+        public List<decimal> Storage { get; set; }
 
-        public BillingTimeline()
+        public List<(DateTime Time, decimal Computing, decimal Storage)> Entries
         {
-            Entries = new List<BillingTimelineEntry>();
-        }
+            get
+            {
+                if (Timestamps.Count != Computing.Count || Computing.Count != Storage.Count)
+                    throw new InvalidOperationException("Timestamps, computing and storage entry count in timeline are not equal.");
 
-        public BillingTimeline(List<BillingTimelineEntry> entries)
-        {
-            this.Entries = entries;
-        }
+                var entries = new List<(DateTime, decimal, decimal)>();
+                for (int i = 0; i < Timestamps.Count; i++)
+                {
+                    entries.Add((DateTimeFromUnixTimestamp(Timestamps[i]), Computing[i], Storage[i]));
+                }
 
-        public void AddEntry(BillingTimelineEntry entry)
-        {
-            Entries.Add(entry);
-        }
-
-        public List<BillingTimelineEntry> GetEntries()
-        {
-            return Entries;
-        }
-
-        public KeyValuePair<DateTime, DateTime> TimelinePeriod()
-        {
-            var list = (from x in Entries select x.Date).OrderBy(x => x).ToList();
-            return new KeyValuePair<DateTime, DateTime>(list.First(), list.Last());
+                return entries;
+            }
         }
     }
 }

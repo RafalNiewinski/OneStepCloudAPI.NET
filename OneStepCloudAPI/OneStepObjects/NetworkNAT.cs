@@ -8,9 +8,17 @@ using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
 {
+    public enum MachineType
+    {
+        virtual_machine,
+        dedicated_machine,
+        unknown
+    }
+
     public class NetworkNAT : NAT
     {
-        public int VirtualMachineId { get; set; }
-        public string VirtualMachineNameTag { get; set; }
+        public int MachineId { get; set; }
+        public MachineType MachineType { get; set; }
+        public string MachineNameTag { get; set; }
     }
 }
