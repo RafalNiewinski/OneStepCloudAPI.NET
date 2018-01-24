@@ -145,7 +145,7 @@ namespace OneStepCloudAPI.Samples.Code
                     {
                         Console.WriteLine("Cost Timeline Entries:");
                         foreach (var entry in costtimeline.Entries)
-                            Console.WriteLine($"    - {entry.Time} - {entry.Value}");
+                            Console.WriteLine($"    - {entry.Time} - +{entry.Value} - {entry.SumValue}");
                     }
 
                     var ccs = oneStep.Billing.GetCreditCards().Result;

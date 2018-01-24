@@ -23,18 +23,19 @@ namespace OneStepCloudAPI.OneStepObjects
     public class BillingTimelineOverview : BillingTimeline
     {
         public List<decimal> Values { get; set; }
+        public List<decimal> SumValues { get; set; }
 
-        public List<(DateTime Time, decimal Value)> Entries
+        public List<(DateTime Time, decimal Value, decimal SumValue)> Entries
         {
             get
             {
                 if (Timestamps.Count != Values.Count)
                     throw new InvalidOperationException("Timestamps and values count in timeline are not equal.");
 
-                var entries = new List<(DateTime, decimal)>();
+                var entries = new List<(DateTime, decimal, decimal)>();
                 for (int i = 0; i < Timestamps.Count; i++)
                 {
-                    entries.Add((DateTimeFromUnixTimestamp(Timestamps[i]), Values[i]));
+                    entries.Add((DateTimeFromUnixTimestamp(Timestamps[i]), Values[i], SumValues[i]));
                 }
 
                 return entries;
