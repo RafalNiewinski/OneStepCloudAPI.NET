@@ -21,12 +21,12 @@ namespace OneStepCloudAPI.Managers
 
         public Task<List<Product>> GetTemplates()
         {
-            return rm.SendRequest<List<Product>>("templates");
+            return rm.SendRequest<List<Product>>("virtual_machines/templates");
         }
 
         public async Task<List<ProductCategory>> GetProducts()
         {
-            return (await rm.SendRequest<ProductCategoriesWrapper>("products")).ProductCategories;
+            return (await rm.SendRequest<ProductCategoriesWrapper>("virtual_machines/products")).ProductCategories;
         }
 
         public Task<List<VirtualMachineSummary>> GetAll()
