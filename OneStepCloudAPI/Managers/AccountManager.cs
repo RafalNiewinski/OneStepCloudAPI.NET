@@ -14,6 +14,17 @@ namespace OneStepCloudAPI.Managers
             this.rm = rm;
         }
 
+        public async Task<string> ActivateByCode(string code)
+        {
+            var res = await rm.SendRequest($"group/activate/by_promocode", Method.POST, new { code = code });
+            return Newtonsoft.Json.Linq.JToken.Parse(res)["amount"].ToString();
+        }
+
+        public async Task ActivateByCard(BillingInformation billdata, CreditCardDetail cc)
+        {
+            await rm.SendRequest("group/activate/by_card", Method.POST, new { billing_information = billdata, credit_card_detail = cc });
+        }
+
         public Task<UserDetail> GetAccountDetails()
         {
             return rm.SendRequest<UserDetail>("user/profile");

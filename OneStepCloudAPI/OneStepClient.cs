@@ -101,7 +101,7 @@ namespace OneStepCloudAPI
 
         public async Task ConfirmAccount(string code)
         {
-            await requestManager.SendRequest($"users/confirm?confirmation_token={code}", Method.GET, new { }, false);
+            requestManager.AuthenticationData = await requestManager.SendRequest<OSCLoginObject>($"users/confirm?confirmation_token={code}", Method.GET, new { }, false);
         }
 
         public Task<Dictionary<string, string>> GetOSCPrices()
