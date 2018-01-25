@@ -58,17 +58,17 @@ namespace OneStepCloudAPI.Managers
         #region GROUP DELETE
         public Task<GroupDeleteChecklist> GroupDeleteChecklist()
         {
-            return rm.SendRequest<GroupDeleteChecklist>("group/precheck_list");
+            return rm.SendRequest<GroupDeleteChecklist>("group/precheck");
         }
 
-        public async Task GenerateEndingInvoice()
+        public async Task GroupDeactivate()
         {
-            await rm.SendRequest("group/ending_invoice", Method.POST);
+            await rm.SendRequest("group/deactivate", Method.POST);
         }
 
         public async Task DeleteGroupPermanently()
         {
-            await rm.SendRequest("group/goodbye", Method.POST);
+            await rm.SendRequest("group/delete", Method.POST);
         }
         #endregion
     }

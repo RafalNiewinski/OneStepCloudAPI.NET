@@ -36,9 +36,16 @@ namespace OneStepCloudAPI.OneStepObjects
         account_created = 0,
         account_verified = 1,
         payment_created = 2,
-        payment_verified = 3,
-        payment_overdue = 4,
-        deleting_process = 5
+        payment_overdue = 3,
+        promocode_created = 4,
+        blocked_expired = 5,
+        blocked_end_of_money = 6,
+        blocked_no_payment = 7,
+        deactivated_expired = 8,
+        deactivated_end_of_money = 9,
+        deactivated_no_payment = 10,
+        deactivated_by_user = 11,
+        deleted_by_user = 12
     }
 
     public class SessionSummary

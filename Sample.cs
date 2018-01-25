@@ -65,6 +65,7 @@ namespace OneStepCloudAPI.Samples.Code
                     Console.WriteLine("ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
                 }
 
+                Console.WriteLine($"Current group status: {session.GroupStatus}");
                 Console.WriteLine($"Current User Permissions ({session.Username}):");
                 foreach (var perm in session.Permissions)
                     Console.WriteLine($"    - {perm.ToString()}");
