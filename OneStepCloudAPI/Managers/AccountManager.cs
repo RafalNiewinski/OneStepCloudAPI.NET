@@ -50,6 +50,16 @@ namespace OneStepCloudAPI.Managers
             return await rm.SendRequest<OSCID>("user/keys", Method.POST, new { name = name, key = key });
         }
 
+        public Task<PrivateSshKey> GenerateSshKey()
+        {
+            return rm.SendRequest<PrivateSshKey>("user/keys/generate?key_type=ssh");
+        }
+
+        public Task<PrivateSshKey> GeneratePuttyKey()
+        {
+            return rm.SendRequest<PrivateSshKey>("user/keys/generate?key_type=putty");
+        }
+
         public async Task DeleteSshKey(int keyid)
         {
             await rm.SendRequest($"user/keys/{keyid}", Method.DELETE, new { id = keyid });
