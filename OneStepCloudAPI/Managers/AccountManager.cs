@@ -40,6 +40,16 @@ namespace OneStepCloudAPI.Managers
             await rm.SendRequest("user/change_password", Method.POST, new { current_password = oldpassword, password = newpassword, password_confirmation = newpassword });
         }
 
+        public async Task ChangeEmailStart(string newemail)
+        {
+            await rm.SendRequest("user/change_email", Method.POST, new { email = newemail });
+        }
+
+        public async Task ChangeEmailConfirm(string newemail, string pin)
+        {
+            rm.AuthenticationData = await rm.SendRequest<OSCLoginObject>("user/change_email", Method.POST, new { email = newemail, pin = pin });
+        }
+
         public Task<List<SshKey>> GetSshKeys()
         {
             return rm.SendRequest<List<SshKey>>("user/keys");
