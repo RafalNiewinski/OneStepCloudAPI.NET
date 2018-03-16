@@ -149,9 +149,29 @@ namespace OneStepCloudAPI.Managers
                 return await Get(id);
         }
 
+        public async Task<VirtualMachine> PowerOffHard(int id, bool wait = true)
+        {
+            await rm.SendRequest($"virtual_machines/{id}/hard_poweroff", Method.POST, new { id = id });
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
+        }
+
         public async Task<VirtualMachine> Reboot(int id, bool wait = true)
         {
             await rm.SendRequest($"virtual_machines/{id}/reboot", Method.POST, new { id = id });
+
+            if (wait)
+                return await WaitForState(id, VirtualMachineStatus.idle);
+            else
+                return await Get(id);
+        }
+
+        public async Task<VirtualMachine> RebootHard(int id, bool wait = true)
+        {
+            await rm.SendRequest($"virtual_machines/{id}/hard_reset", Method.POST, new { id = id });
 
             if (wait)
                 return await WaitForState(id, VirtualMachineStatus.idle);
