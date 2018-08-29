@@ -65,6 +65,12 @@ namespace OneStepCloudAPI.Samples.Code
                     Console.WriteLine("ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
                 }
 
+                if(session.AccountExpirationDate > 0)
+                    Console.WriteLine($"!!!     Your account will expire at: {new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(session.AccountExpirationDate)}     !!!");
+
+                if (session.AccountDeactivationDate > 0)
+                    Console.WriteLine($"!!!     Your account will be deactivated at: {new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(session.AccountDeactivationDate)}     !!!");
+
                 Console.WriteLine($"Current group status: {session.GroupStatus}");
                 Console.WriteLine($"Current User Permissions ({session.Username}):");
                 foreach (var perm in session.Permissions)
@@ -182,7 +188,7 @@ namespace OneStepCloudAPI.Samples.Code
                     }
 
                     var vmscosts = oneStep.Billing.GetVirtualMachinesCosts().Result;
-                    if (vms.Count > 0)
+                    if (vms.Count > 0 && vmscosts.Count > 0)
                     {
                         Console.WriteLine("Current cost per vm:");
                         foreach (var vmcost in vmscosts)

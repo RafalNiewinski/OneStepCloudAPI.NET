@@ -60,6 +60,8 @@ namespace OneStepCloudAPI.OneStepObjects
         public GroupLimits GroupLimits { get; set; }
         public InfrastructureSummary InfrastructureSummary { get; set; }
         public InvoiceStatus? InvoiceAlert { get; set; }
+        public int AccountExpirationDate { get; set; }
+        public int AccountDeactivationDate { get; set; }
 
         public static implicit operator int(SessionSummary ss) { return ss.Id; }
 
