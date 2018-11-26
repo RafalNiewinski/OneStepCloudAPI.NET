@@ -21,6 +21,8 @@ namespace OneStepCloudAPI.OneStepObjects
         public VirtualMachineDiskStorageType StorageType { get; set; }
         public int StorageGb { get; set; }
         public bool Primary { get; set; }
+        public int ScsiBus { get; set; }
+        public int ScsiTarget { get; set; }
 
         public static implicit operator int(VirtualMachineDisk disk) { return disk.Id; }
     }
