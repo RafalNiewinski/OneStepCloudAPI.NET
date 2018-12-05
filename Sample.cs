@@ -179,6 +179,14 @@ namespace OneStepCloudAPI.Samples.Code
                             Console.WriteLine("    - " + payment.CreatedAt.ToShortDateString() + " - " + (payment.PaymentMethod != null ? payment.PaymentMethod.DisplayName : "") + " - " + payment.Amount + " - " + payment.Status);
                     }
 
+                    var usageReports = oneStep.Billing.GetUsageReports().Result;
+                    if (usageReports.Count > 0)
+                    {
+                        Console.WriteLine("Usage reports:");
+                        foreach (var report in usageReports)
+                            Console.WriteLine($"    - {report.Id} - ({report.PeriodStart.ToShortDateString()} - {report.PeriodEnd.ToShortDateString()})");
+                    }
+
                     var invoices = oneStep.Billing.GetInvoices().Result;
                     if (invoices.Count > 0)
                     {

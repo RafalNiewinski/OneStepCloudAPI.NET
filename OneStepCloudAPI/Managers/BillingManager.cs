@@ -64,6 +64,16 @@ namespace OneStepCloudAPI.Managers
             return rm.SendRequest<List<Payment>>("billing/payment_history");
         }
 
+        public Task<List<UsageReport>> GetUsageReports()
+        {
+            return rm.SendRequest<List<UsageReport>>("usage_reports");
+        }
+
+        public Task<byte[]> DownloadUsageReport(int id)
+        {
+            return rm.SendRequest<byte[]>($"usage_reports/{id}");
+        }
+
         public Task<List<Invoice>> GetInvoices()
         {
             return rm.SendRequest<List<Invoice>>("invoices");
