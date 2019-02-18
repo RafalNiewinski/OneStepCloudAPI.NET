@@ -114,7 +114,7 @@ namespace OneStepCloudAPI.Samples.Code
 
                 if(session.ChackPermission(UserPermission.networking_manage))
                 {
-                    List<PublicNetwork> pubnetworks = oneStep.Network.GetNetworksDetailed().Result;
+                    List<PublicNetwork> pubnetworks = oneStep.Network.GetPublicNetworksDetailed().Result;
                     Console.WriteLine("Public IPs:");
                     foreach (var net in pubnetworks)
                     {
