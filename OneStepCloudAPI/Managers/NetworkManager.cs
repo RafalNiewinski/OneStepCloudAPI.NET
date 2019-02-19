@@ -94,7 +94,7 @@ namespace OneStepCloudAPI.Managers
             return (await GetNats()).Values.SelectMany(x => x).ToList();
         }
 
-        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto, bool wait = true)
+        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol protocol, bool wait = true)
         {
             int id = await rm.SendRequest<OSCID>("nats/advanced", Method.POST,
                 new
@@ -104,7 +104,7 @@ namespace OneStepCloudAPI.Managers
                     private_network_id = privatenetworkid,
                     destination_port_range = destportrange,
                     source_port_range = sourceportrange,
-                    protocol = proto.ToString()
+                    protocol
                 }
             );
 

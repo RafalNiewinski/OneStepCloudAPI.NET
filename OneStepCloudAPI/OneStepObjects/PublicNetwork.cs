@@ -20,7 +20,8 @@ namespace OneStepCloudAPI.OneStepObjects
     {
         unknown,
         tcp,
-        udp
+        udp,
+        X1to1
     }
 
     public class PublicNetwork : PublicNetworkSummary
