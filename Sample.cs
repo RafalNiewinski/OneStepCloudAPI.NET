@@ -79,6 +79,7 @@ namespace OneStepCloudAPI.Samples.Code
                 Console.WriteLine("Group resource usage summary:");
                 GroupLimits limits = session.GroupLimits;
                 Console.WriteLine($"{limits.Vms.Current}/{limits.Vms.Limit} VMs used");
+                Console.WriteLine($"{limits.Dms.Current}/{limits.Dms.Limit} DMs used");
                 Console.WriteLine($"{limits.Cpu.Current}/{limits.Cpu.Limit} CPUs used");
                 Console.WriteLine($"{limits.MemoryMb.Current}/{limits.MemoryMb.Limit} MB RAM used");
                 Console.WriteLine($"{limits.StorageGb.Current}/{limits.StorageGb.Limit} GB STORAGE used");

@@ -13,5 +13,6 @@ namespace OneStepCloudAPI.OneStepObjects
         public ResourceLimit StorageGb { get; set; }
         public ResourceLimit PublicNetworks { get; set; }
         public ResourceLimit Vms { get; set; }
+        public ResourceLimit Dms { get; set; }
     }
 }
