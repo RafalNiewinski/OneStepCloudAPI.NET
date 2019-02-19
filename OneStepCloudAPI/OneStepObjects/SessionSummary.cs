@@ -27,7 +27,10 @@ namespace OneStepCloudAPI.OneStepObjects
         billing_manage,
         marketplace_view,
         marketplace_manage,
-        dedicated_machine_create
+        dedicated_machine_create,
+        virtual_network_create,
+        virtual_network_update,
+        virtual_network_delete
     }
 
     public enum GroupStatus

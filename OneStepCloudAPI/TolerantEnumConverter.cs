@@ -32,6 +32,7 @@ namespace OneStepCloudAPI
                     // If value contains forbidden first character (not letter) prepend with 'X'
                     if (!char.IsLetter(enumText[0]))
                         enumText = $"X{enumText}";
+
                     string match = names
                         .Where(n => string.Equals(n, enumText, StringComparison.OrdinalIgnoreCase))
                         .FirstOrDefault();

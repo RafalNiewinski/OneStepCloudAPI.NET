@@ -14,5 +14,6 @@ namespace OneStepCloudAPI.OneStepObjects
         public ResourceLimit PublicNetworks { get; set; }
         public ResourceLimit Vms { get; set; }
         public ResourceLimit Dms { get; set; }
+        public ResourceLimit VirtualNetworks { get; set; }
     }
 }

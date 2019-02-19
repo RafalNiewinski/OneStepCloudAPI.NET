@@ -68,8 +68,70 @@ namespace OneStepCloudAPI.Managers
 
                 throw new TimeoutException();
             }
+        }
+        #endregion
 
-            throw new TimeoutException();
+        #region Virtual Networks
+        public Task<List<VirtualNetwork>> GetVritualNetworks()
+        {
+            return rm.SendRequest<List<VirtualNetwork>>("virtual_networks");
+        }
+
+        public Task<int> CreateVirtualNetwork(VirtualNetwork virtualNetwork)
+        {
+            return CreateVirtualNetwork(virtualNetwork.Name, virtualNetwork.Network, virtualNetwork.PublicNetworkId);
+        }
+
+        public async Task<int> CreateVirtualNetwork(string name, string network, int publicNetwork)
+        {
+            return await rm.SendRequest<OSCID>("virtual_networks", Method.POST, new
+            {
+                network,
+                public_network_id = publicNetwork,
+                name
+            });
+        }
+
+        public Task UpdateVirtualNetwork(VirtualNetwork virtualNetwork)
+        {
+            return UpdateVirtualNetwork(virtualNetwork, virtualNetwork.Name, virtualNetwork.Network, virtualNetwork.PublicNetworkId);
+        }
+
+        public Task UpdateVirtualNetwork(int netId, string name, string network, int publicNetwork)
+        {
+            return rm.SendRequest($"virtual_networks/{netId}", Method.PATCH, new
+            {
+                network,
+                public_network_id = publicNetwork,
+                name
+            });
+        }
+
+        public Task DeleteVirtualNetwork(int netId)
+        {
+            return rm.SendRequest($"virtual_networks/{netId}", Method.DELETE);
+        }
+        #endregion
+
+        #region Private Networks
+        public Task<List<PrivateNetwork>> GetPrivateNetworks()
+        {
+            return rm.SendRequest<List<PrivateNetwork>>("private_networks");
+        }
+
+        public Task UpdatePrivateNetwork(PrivateNetwork privateNetwork)
+        {
+            return UpdatePrivateNetwork(privateNetwork, privateNetwork.VirtualNetwork, privateNetwork.IpAddress, privateNetwork.OutboundNetwork?.Id);
+        }
+
+        public Task UpdatePrivateNetwork(int netId, int virtualNetwork, string ipAddress, int? outboundNetwork = null)
+        {
+            return rm.SendRequest($"private_networks/{netId}", Method.PATCH, new
+            {
+                virtual_network_id = virtualNetwork,
+                public_network_id = (dynamic) outboundNetwork ?? "",
+                ip_address = ipAddress
+            });
         }
         #endregion
 
