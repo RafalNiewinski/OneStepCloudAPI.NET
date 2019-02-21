@@ -15,7 +15,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public string Description { get; set; }
         public string Username { get; set; }
         public ProductSummary Product { get; set; }
-        public List<PrivateNetwork> PrivateNetworks { get; set; }
+        public List<PrivateNetworkSummary> PrivateNetworks { get; set; }
         public List<VirtualMachineSnapshot> VirtualMachineSnapshots { get; set; }
         public List<VirtualMachineTask> VirtualMachineTasks { get; set; }
         public string CreatedBy { get; set; }

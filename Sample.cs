@@ -79,10 +79,12 @@ namespace OneStepCloudAPI.Samples.Code
                 Console.WriteLine("Group resource usage summary:");
                 GroupLimits limits = session.GroupLimits;
                 Console.WriteLine($"{limits.Vms.Current}/{limits.Vms.Limit} VMs used");
+                Console.WriteLine($"{limits.Dms.Current}/{limits.Dms.Limit} DMs used");
                 Console.WriteLine($"{limits.Cpu.Current}/{limits.Cpu.Limit} CPUs used");
                 Console.WriteLine($"{limits.MemoryMb.Current}/{limits.MemoryMb.Limit} MB RAM used");
                 Console.WriteLine($"{limits.StorageGb.Current}/{limits.StorageGb.Limit} GB STORAGE used");
                 Console.WriteLine($"{limits.PublicNetworks.Current}/{limits.PublicNetworks.Limit} IPs used");
+                Console.WriteLine($"{limits.VirtualNetworks.Current}/{limits.VirtualNetworks.Limit} Virtual Networks used");
 
                 if (session.ChackPermission(UserPermission.users_manage))
                 {
@@ -114,7 +116,7 @@ namespace OneStepCloudAPI.Samples.Code
 
                 if(session.ChackPermission(UserPermission.networking_manage))
                 {
-                    List<PublicNetwork> pubnetworks = oneStep.Network.GetNetworksDetailed().Result;
+                    List<PublicNetwork> pubnetworks = oneStep.Network.GetPublicNetworksDetailed().Result;
                     Console.WriteLine("Public IPs:");
                     foreach (var net in pubnetworks)
                     {
@@ -126,6 +128,24 @@ namespace OneStepCloudAPI.Samples.Code
                                 Console.WriteLine($"            - {nat.MachineNameTag}({nat.MachineType.ToString()}: {nat.MachineId}) - {nat.Protocol.ToString()} - {nat.Status.ToString()}    -    {nat.SourcePortRange} => {nat.DestinationPortRange}");
                         }
                     }
+
+                    List<VirtualNetwork> virnetworks = oneStep.Network.GetVritualNetworks().Result;
+                    Console.WriteLine("Virtual networks:");
+                    foreach(var net in virnetworks)
+                    {
+                        Console.WriteLine($"    - {net.Id}: {net.Name} - {net.Network} - External: {pubnetworks.First(x => x.Id == net.PublicNetworkId).IpAddress} - {(net.Primary ? "primary" : "additional")}");
+                        if(net.PrivateNetworks.Count > 0)
+                        {
+                            Console.WriteLine("        - Private Networks:");
+                            foreach (var priv in net.PrivateNetworks)
+                                Console.WriteLine($"            - {priv.IpAddress} - {priv.Machine.Type} -> {priv.Machine.Name} ({priv.Machine.Id})");
+                        }
+                    }
+
+                    List<PrivateNetwork> privnetworks = oneStep.Network.GetPrivateNetworks().Result;
+                    Console.WriteLine("Private networks (adapters):");
+                    foreach (var net in privnetworks)
+                        Console.WriteLine($"    - {net.Id}: {net.IpAddress} - {net.Machine.Type} -> {net.Machine.Name} ({net.Machine.Id}) - Network: {net.VirtualNetwork.Name} - Outbound: {net.OutboundNetwork?.IpAddress ?? ("^" + pubnetworks.First(x => x.Id == virnetworks.First(y => y.Id == net.VirtualNetwork).PublicNetworkId).IpAddress) }");
                 }
 
                 if(session.ChackPermission(UserPermission.billing_manage))

@@ -29,6 +29,10 @@ namespace OneStepCloudAPI
 
                 if(!string.IsNullOrEmpty(enumText))
                 {
+                    // If value contains forbidden first character (not letter) prepend with 'X'
+                    if (!char.IsLetter(enumText[0]))
+                        enumText = $"X{enumText}";
+
                     string match = names
                         .Where(n => string.Equals(n, enumText, StringComparison.OrdinalIgnoreCase))
                         .FirstOrDefault();
@@ -62,7 +66,13 @@ namespace OneStepCloudAPI
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue(value.ToString());
+            string data = value.ToString();
+
+            // If value contains preprended first character 'X' before forbidden char remove it
+            if (data.Length > 1 && data[0] == 'X' && !char.IsLetter(data[1]))
+                data = data.Substring(1);
+
+            writer.WriteValue(data);
         }
 
         private bool IsNullableType(Type t)

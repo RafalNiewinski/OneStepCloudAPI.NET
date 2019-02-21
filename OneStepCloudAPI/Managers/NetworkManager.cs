@@ -17,54 +17,121 @@ namespace OneStepCloudAPI.Managers
             this.rm = rm;
         }
 
-        #region Networks
-        public Task<List<PublicNetworkSummary>> GetNetworks()
+        #region Public Networks
+        public Task<List<PublicNetworkSummary>> GetPublicNetworks()
         {
             return rm.SendRequest<List<PublicNetworkSummary>>("public_networks");
         }
 
-        public async Task<List<PublicNetwork>> GetNetworksDetailed()
+        public async Task<List<PublicNetwork>> GetPublicNetworksDetailed()
         {
-            var summaries = await GetNetworks();
+            var summaries = await GetPublicNetworks();
             var detailed = new List<PublicNetwork>();
 
             foreach (var net in summaries)
-                detailed.Add(await GetNetwork(net));
+                detailed.Add(await GetPublicNetwork(net));
 
             return detailed;
         }
 
-        public Task<PublicNetwork> GetNetwork(int netid)
+        public Task<PublicNetwork> GetPublicNetwork(int netid)
         {
             return rm.SendRequest<PublicNetwork>($"public_networks/{netid}");
         }
 
-        public async Task<PublicNetwork> Create(bool wait = true)
+        public async Task<PublicNetwork> CreatePublicNetwork(bool wait = true)
         {
             int id = await rm.SendRequest<OSCID>("public_networks", Method.POST);
 
             if (wait)
                 return await WaitForNetState(id, NetworkResourceStatus.idle);
             else
-                return await GetNetwork(id);
+                return await GetPublicNetwork(id);
         }
 
-        public async Task Delete(int netid)
+        public async Task DeletePublicNetwork(int netid, bool wait = true)
         {
             await rm.SendRequest($"public_networks/{netid}", Method.DELETE);
 
-            List<PublicNetworkSummary> nets = await GetNetworks();
-            var startTime = DateTime.Now;
-            while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
+            if (wait)
             {
-                if (nets.Where(x => x.Id == netid).ToList().Count == 0)
-                    return;
+                List<PublicNetworkSummary> nets = await GetPublicNetworks();
+                var startTime = DateTime.Now;
+                while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
+                {
+                    if (nets.Where(x => x.Id == netid).ToList().Count == 0)
+                        return;
 
-                await Task.Delay(OneStepClient.PoolingInterval);
-                nets = await GetNetworks();
+                    await Task.Delay(OneStepClient.PoolingInterval);
+                    nets = await GetPublicNetworks();
+                }
+
+                throw new TimeoutException();
             }
+        }
+        #endregion
 
-            throw new TimeoutException();
+        #region Virtual Networks
+        public Task<List<VirtualNetwork>> GetVritualNetworks()
+        {
+            return rm.SendRequest<List<VirtualNetwork>>("virtual_networks");
+        }
+
+        public Task<int> CreateVirtualNetwork(VirtualNetwork virtualNetwork)
+        {
+            return CreateVirtualNetwork(virtualNetwork.Name, virtualNetwork.Network, virtualNetwork.PublicNetworkId);
+        }
+
+        public async Task<int> CreateVirtualNetwork(string name, string network, int publicNetwork)
+        {
+            return await rm.SendRequest<OSCID>("virtual_networks", Method.POST, new
+            {
+                network,
+                public_network_id = publicNetwork,
+                name
+            });
+        }
+
+        public Task UpdateVirtualNetwork(VirtualNetwork virtualNetwork)
+        {
+            return UpdateVirtualNetwork(virtualNetwork, virtualNetwork.Name, virtualNetwork.Network, virtualNetwork.PublicNetworkId);
+        }
+
+        public Task UpdateVirtualNetwork(int netId, string name, string network, int publicNetwork)
+        {
+            return rm.SendRequest($"virtual_networks/{netId}", Method.PATCH, new
+            {
+                network,
+                public_network_id = publicNetwork,
+                name
+            });
+        }
+
+        public Task DeleteVirtualNetwork(int netId)
+        {
+            return rm.SendRequest($"virtual_networks/{netId}", Method.DELETE);
+        }
+        #endregion
+
+        #region Private Networks
+        public Task<List<PrivateNetwork>> GetPrivateNetworks()
+        {
+            return rm.SendRequest<List<PrivateNetwork>>("private_networks");
+        }
+
+        public Task UpdatePrivateNetwork(PrivateNetwork privateNetwork)
+        {
+            return UpdatePrivateNetwork(privateNetwork, privateNetwork.VirtualNetwork, privateNetwork.IpAddress, privateNetwork.OutboundNetwork?.Id);
+        }
+
+        public Task UpdatePrivateNetwork(int netId, int virtualNetwork, string ipAddress, int? outboundNetwork = null)
+        {
+            return rm.SendRequest($"private_networks/{netId}", Method.PATCH, new
+            {
+                virtual_network_id = virtualNetwork,
+                public_network_id = (dynamic) outboundNetwork ?? "",
+                ip_address = ipAddress
+            });
         }
         #endregion
 
@@ -89,7 +156,7 @@ namespace OneStepCloudAPI.Managers
             return (await GetNats()).Values.SelectMany(x => x).ToList();
         }
 
-        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol proto, bool wait = true)
+        public async Task<NetworkNAT> CreateNat(int vmid, int publicnetworkid, int privatenetworkid, string sourceportrange, string destportrange, NetworkProtocol protocol, bool wait = true)
         {
             int id = await rm.SendRequest<OSCID>("nats/advanced", Method.POST,
                 new
@@ -99,32 +166,35 @@ namespace OneStepCloudAPI.Managers
                     private_network_id = privatenetworkid,
                     destination_port_range = destportrange,
                     source_port_range = sourceportrange,
-                    protocol = proto.ToString()
+                    protocol
                 }
             );
 
             if(wait)
                 return await WaitForNatState(id, publicnetworkid, NetworkResourceStatus.idle);
             else
-                return (await GetNetwork(publicnetworkid)).Nats.Where(n => n.Id == id).First();
+                return (await GetPublicNetwork(publicnetworkid)).Nats.Where(n => n.Id == id).First();
         }
 
-        public async Task DeleteNat(int natid)
+        public async Task DeleteNat(int natid, bool wait = true)
         {
             await rm.SendRequest($"nats/{natid}", Method.DELETE, new { id = natid });
 
-            var nats = await GetNatsFlatten();
-            var startTime = DateTime.Now;
-            while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
+            if (wait)
             {
-                if (nats.Where(x => x.Id == natid).ToList().Count == 0)
-                    return;
+                var nats = await GetNatsFlatten();
+                var startTime = DateTime.Now;
+                while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
+                {
+                    if (nats.Where(x => x.Id == natid).ToList().Count == 0)
+                        return;
 
-                await Task.Delay(OneStepClient.PoolingInterval);
-                nats = await GetNatsFlatten();
+                    await Task.Delay(OneStepClient.PoolingInterval);
+                    nats = await GetNatsFlatten();
+                }
+
+                throw new TimeoutException();
             }
-
-            throw new TimeoutException();
         }
         #endregion
 
@@ -138,7 +208,7 @@ namespace OneStepCloudAPI.Managers
 
             while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
             {
-                net = await GetNetwork(netid);
+                net = await GetPublicNetwork(netid);
 
                 if (net.Status == state)
                     return net;
@@ -160,7 +230,7 @@ namespace OneStepCloudAPI.Managers
 
             while (DateTime.Now - startTime < TimeSpan.FromMilliseconds(OneStepClient.TaskTimeout))
             {
-                var nats = (await GetNetwork(netid)).Nats;
+                var nats = (await GetPublicNetwork(netid)).Nats;
                 nat = nats.Where(n => n.Id == natid).First();
 
                 if (nat.Status == state)
