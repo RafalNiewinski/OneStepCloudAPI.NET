@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;net461;netstandard1.6</TargetFrameworks>
+    <Company>OneStepCloud</Company>
+    <Product>OneStepCloudAPI</Product>
+    <Authors>Rafal Niewinski</Authors>
+    <PackageProjectUrl>https://github.com/RafalNiewinski/OneStepCloudAPI.NET</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/RafalNiewinski/OneStepCloudAPI.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/RafalNiewinski/OneStepCloudAPI.NET</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <AssemblyVersion>1.2.3.4</AssemblyVersion>
+    <FileVersion>1.2.3.4</FileVersion>
+    <Version>1.2.3.4</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
