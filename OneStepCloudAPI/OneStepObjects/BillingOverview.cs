@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OneStepCloudAPI.OneStepObjects
@@ -14,13 +15,24 @@ namespace OneStepCloudAPI.OneStepObjects
         {
             get
             {
-                return $"{PeriodStart.ToString("MM-dd-yyyy")} - {PeriodEnd.ToString("MM-dd-yyyy")}";
+                return $"{PeriodStart.ToString(CurrentPeriodFormat)} - {PeriodEnd.ToString(CurrentPeriodFormat)}";
             }
             set
             {
                 var dates = value.Split(new string[] { " - " }, StringSplitOptions.None);
-                if (dates[0] != null) PeriodStart = DateTime.ParseExact(dates[0], "MM-dd-yyyy", CultureInfo.InvariantCulture);
-                if (dates[1] != null) PeriodEnd = DateTime.ParseExact(dates[1], "MM-dd-yyyy", CultureInfo.InvariantCulture);
+
+                if (Regex.IsMatch(dates[0], @"^\d{4}-\d{2}-\d{2}$") && Regex.IsMatch(dates[1], @"^\d{4}-\d{2}-\d{2}$")) // yyyy-mm-dd
+                {
+                    PeriodStart = DateTime.ParseExact(dates[0], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    PeriodEnd = DateTime.ParseExact(dates[1], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                }
+                else if (Regex.IsMatch(dates[0], @"^\d{2}-\d{2}-\d{4}$") && Regex.IsMatch(dates[1], @"^\d{2}-\d{2}-\d{4}$")) // mm-dd-yyyy
+                {
+                    PeriodStart = DateTime.ParseExact(dates[0], "MM-dd-yyyy", CultureInfo.InvariantCulture);
+                    PeriodEnd = DateTime.ParseExact(dates[1], "MM-dd-yyyy", CultureInfo.InvariantCulture);
+                }
+                else
+                    throw new System.FormatException("OneStep servers returned invalid format date. Cannot parse billing period.");
             }
         }
         public string CurrentBalance { get; set; }
@@ -42,5 +54,7 @@ namespace OneStepCloudAPI.OneStepObjects
         public DateTime PeriodStart { get; set; }
         [JsonIgnore]
         public DateTime PeriodEnd { get; set; }
+        [JsonIgnore]
+        private string CurrentPeriodFormat { get; set; } = "MM-dd-yyyy";
     }
 }
